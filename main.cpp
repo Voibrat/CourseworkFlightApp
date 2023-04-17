@@ -1,11 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <sstream>
-
 
 using namespace std;
-
 
 class Flight
 {
@@ -389,7 +386,7 @@ void findClosestAndFarthest()
     cout << "Введите название аэропорта (или введите 'all' чтобы показать все): ";
     cin >> airport_name;
 
-    if (airport_name == "all" or airport_name == "All")
+    if (airport_name == "all" or airport_name == "All" or airport_name == "ALL")
     {
         double min_distance = 1e9, max_distance = -1e9;
         int min_index = -1, max_index = -1;
@@ -450,7 +447,7 @@ void findCheapestAndMostExpensive()
     cout << "Введите наименование рейса (или введите 'all' чтобы показать все): ";
     cin >> flight_name;
 
-    if (flight_name == "all" or flight_name == "All")
+    if (flight_name == "all" or flight_name == "All" or flight_name == "ALL")
     {
         double min_price = 1e9, max_price = -1e9;
         int min_index = -1, max_index = -1;

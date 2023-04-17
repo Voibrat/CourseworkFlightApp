@@ -1,0 +1,3 @@
+/Users/voibrat/Yandex.Disk.localized/#Code/CourseworkFlightApp/cmake-build-debug/CMakeFiles/CourseworkFlightApp.dir
+/Users/voibrat/Yandex.Disk.localized/#Code/CourseworkFlightApp/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/voibrat/Yandex.Disk.localized/#Code/CourseworkFlightApp/cmake-build-debug/CMakeFiles/rebuild_cache.dir

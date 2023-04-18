@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-
+#include <sstream>
 using namespace std;
 
 class Flight
@@ -22,6 +22,7 @@ public:
         ticket_price = 0.0;
 
     }
+
     friend istream& operator>>(istream& is, Flight& f)
     {
         is >> f.airport_name >> f.flight_name >> f.flight_number >> f.departure_time >> f.distance >> f.ticket_price;
@@ -163,6 +164,7 @@ public:
 
         fin.read((char*)&distance, sizeof(int));
         fin.read((char*)&ticket_price, sizeof(double));
+        fin.ignore(); //игнор ньюлайнов
     }
 
     //функции для записи и чтения в обычном формате
@@ -202,7 +204,7 @@ vector<Flight> flights;
 
 void loadFlights()
 {
-    ifstream fin("flights.bin", ios::binary);
+    ifstream fin("flights.bin");
 
     if (fin.is_open())
     {
@@ -519,13 +521,16 @@ int main()
         loadFlightsTxt();
     } else if (choiceLoad == 2){
         loadFlights();
+        //удаляет последний элемент вектора классов, решает проблему пустых экземпляров класса FLight при чтении из файла
+        //flights.pop_back();
     } else {
         cout << "Ошибка ввода, пожалуйста, попробуйте еще раз" << endl;
         return 0;
     }
 
-    //удаляет последний элемент вектора классов, решает проблему пустых экземпляров класса FLight при чтении из файла
+    //удаляет последний элемент вектора классов, частично решает проблему пустых экземпляров класса FLight при чтении из файла
     flights.pop_back();
+
 
     while (true)
     {

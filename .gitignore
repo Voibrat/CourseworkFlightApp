@@ -1,9 +1,0 @@
-.ninja_deps
-.ninja_log
-build.ninja
-cmake_install.cmake
-CMakeLists.txt
-CMakeCache.txt
-\.cmake
-\CMakeFiles
-\Testing

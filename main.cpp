@@ -3,7 +3,7 @@
 #include <vector>
 #include <sstream>
 using namespace std;
-
+// тут была кошка и все поломала
 class Flight
 {
 private:

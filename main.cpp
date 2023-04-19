@@ -506,7 +506,7 @@ void findCheapestAndMostExpensive()
 
 int main()
 {
-    setlocale(LC_ALL, "Russian");
+    //setlocale(LC_ALL, "Russian");
 
     loadFlights();
     int choiceLoad = 0;

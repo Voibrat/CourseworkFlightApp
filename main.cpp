@@ -3,7 +3,6 @@
 #include <vector>
 #include <sstream>
 using namespace std;
-
 class Flight
 {
 private:
@@ -22,13 +21,6 @@ public:
         ticket_price = 0.0;
 
     }
-
-    friend istream& operator>>(istream& is, Flight& f)
-    {
-        is >> f.airport_name >> f.flight_name >> f.flight_number >> f.departure_time >> f.distance >> f.ticket_price;
-        return is;
-    }
-
 
     // Сеттеры
     void setAirportName(string name)
@@ -202,9 +194,10 @@ public:
 
 vector<Flight> flights;
 
+// нужно реализовать проверку на конец файла
 void loadFlights()
 {
-    ifstream fin("flights.bin");
+    ifstream fin("flights.bin", ios::binary | ios::in);
 
     if (fin.is_open())
     {
@@ -219,26 +212,29 @@ void loadFlights()
     }
 }
 
-//для бинарников
-void saveFlights()
-{
-    ofstream fout("flights.bin", ios::binary);
-
-    if (fout.is_open())
+// для бинарников
+    void saveFlights()
     {
-        for (int i = 0; i < flights.size(); i++)
+        ofstream fout("flights.bin", ios::binary | ios::trunc);
+
+        if (fout.is_open())
         {
-            flights[i].write(fout);
-            //fout << flights[i];
+            for (int i = 0; i < flights.size(); i++)
+            {
+                if ((flights[i].getAirportName() != "") and (flights[i].getFlightName() != "") and (flights[i].getFlightNumber() != "")
+                and (flights[i].getDepartureTime() != "") and (flights[i].getDistance() != 0) and (flights[i].getTicketPrice() != 0.0))
+                {
+                    flights[i].write(fout);
+                }
+            }
+
+            fout.close();
         }
-
-        fout.close();
     }
-}
-
-//для тхт
+// нужно реализовать проверку на конец файла
+// для тхт
 void loadFlightsTxt() {
-    ifstream fin("flights.txt");
+    ifstream fin("flights.txt", ios::in);
 
     if (fin.is_open())
     {
@@ -254,13 +250,17 @@ void loadFlightsTxt() {
 }
 
 void saveFlightsTxt() {
-    ofstream fout("flights.txt");
+    ofstream fout("flights.txt", ios::trunc);
 
     if (fout.is_open())
     {
         for (int i = 0; i < flights.size(); i++)
         {
-            flights[i].write_text(fout);
+            if ((flights[i].getAirportName() != "") and (flights[i].getFlightName() != "") and (flights[i].getFlightNumber() != "")
+            and (flights[i].getDepartureTime() != "") and (flights[i].getDistance() != 0) and (flights[i].getTicketPrice() != 0.0))
+            {
+                flights[i].write_text(fout);
+            }
         }
 
         fout.close();
@@ -315,7 +315,7 @@ void searchFlights()
         }
     }
 }
-
+// переписать для работы с векторами
 void editTimeFlight()
 {
     int index;
@@ -340,6 +340,7 @@ void editTimeFlight()
     }
 }
 
+// переписать для работы с векторами
 void editPriceFlight()
 {
     int index;
@@ -503,10 +504,21 @@ void findCheapestAndMostExpensive()
         flights[max_index].display();
     }
 }
+void emptyChecker() {
+    for (int i = 0; i < flights.size(); i++)
+    {
+        if ((flights[i].getAirportName() != "") or (flights[i].getFlightName() != "") or (flights[i].getFlightNumber() != "")
+            or (flights[i].getDepartureTime() != "") or (flights[i].getDistance() != 0) or (flights[i].getTicketPrice() != 0.0))
+        {
+            flights.pop_back();
+        }
+    }
+}
+
 
 int main()
 {
-    //setlocale(LC_ALL, "Russian");
+    setlocale(LC_ALL, "Russian");
 
     loadFlights();
     int choiceLoad = 0;
@@ -529,8 +541,9 @@ int main()
     }
 
     //удаляет последний элемент вектора классов, частично решает проблему пустых экземпляров класса FLight при чтении из файла
-    flights.pop_back();
+    //flights.pop_back();
 
+    emptyChecker();
 
     while (true)
     {

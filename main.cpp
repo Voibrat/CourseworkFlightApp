@@ -2,6 +2,9 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+#include <algorithm>
+#include <experimental/iterator>
+#include <iterator>
 using namespace std;
 class Flight
 {
@@ -551,7 +554,7 @@ int main()
     //flights.pop_back();
 
     //emptyChecker();
-
+/*
     while (true)
     {
         cout << "===================================================" << endl;
@@ -607,6 +610,9 @@ int main()
 
         cout << endl;
     }
-
+*/
+    for (int i=0; i < flights.size(); i++) {
+        flights[i].display();
+    }
     return 0;
 }

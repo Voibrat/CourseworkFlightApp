@@ -319,15 +319,19 @@ void searchFlights()
 // Ввод данных для поиска и модификации производить с клавиатуры.
 // Выбор варианта модификации определяется из диалога.
 // upd: функция цундерит - меняет правильно, но говорит что неправильный номер
+// upd2: починил
 void editTimeFlight()
 {
-    displayFlights();
-    string index;
+    string number;
     bool flag = false;
-    cout << "Введите наименование рейса рейса чтобы изменить время вылета: ";
-    cin >> index;
+
+    displayFlights();
+
+    cout << "Введите номер рейса рейса чтобы изменить время вылета: ";
+    cin >> number;
+
     for (int i=0; i < flights.size(); i++) {
-        if (index == flights[i].getFlightName()) {
+        if (number == flights[i].getFlightNumber()) {
             string Time = "";
             cout << "Введите новое время вылета: ";
             cin >> Time;
@@ -339,7 +343,7 @@ void editTimeFlight()
         }
     }
     if (flag != true) {
-        cout << "Неверное наименование рейса." << endl;
+        cout << "Неверный номер рейса." << endl;
     }
 }
 
@@ -351,22 +355,29 @@ void editTimeFlight()
 
 void editPriceFlight()
 {
-    int index;
-    cout << "Введите индекс рейса чтобы изменить его стоимость: ";
-    cin >> index;
+    string name;
+    bool flag = false;
 
-    if (index >= 0 && index < flights.size())
+    displayFlights();
+
+    cout << "Введите наименование рейса чтобы изменить его стоимость: ";
+    cin >> name;
+
+
+    for (int i=0; i < flights.size(); i++)
     {
-        double price;
-        cout << "Введите новую стоимость билета: ";
-        cin >> price;
-        flights[index].setTicketPrice(price);
-        saveFlights();
-        saveFlightsTxt();
+        if (name == flights[i].getFlightName())
+        {
+            double price;
+            cout << "Введите новую стоимость билета: ";
+            cin >> price;
+            flights[i].setTicketPrice(price);
+            saveFlights();
+            saveFlightsTxt();
+        }
     }
-    else
-    {
-        cout << "Неправильный номер." << endl;
+    if (flag != true) {
+        cout << "Неверный номер рейса." << endl;
     }
 }
 

@@ -314,7 +314,11 @@ void searchFlights()
         }
     }
 }
+
 // переписать для работы с векторами
+// Ввод данных для поиска и модификации производить с клавиатуры.
+// Выбор варианта модификации определяется из диалога.
+
 void editTimeFlight()
 {
     int index;
@@ -340,6 +344,11 @@ void editTimeFlight()
 }
 
 // переписать для работы с векторами
+// Модификация данных о рейсах ряда аэропортов.
+// Поиск производить по наименованию аэропорта и номеру рейса, модифицировать стоимость билета.
+// Данные для модификации вводить из файла данных для модификации,
+// в котором они хранятся смешанно по различным аэропортам.
+
 void editPriceFlight()
 {
     int index;
@@ -348,15 +357,12 @@ void editPriceFlight()
 
     if (index >= 0 && index < flights.size())
     {
-        ofstream fout("flights.bin", ios::binary);
-
-        if (fout.is_open()) {
-            double price;
-            cout << "Введите новую стоимость билета: ";
-            cin >> price;
-            flights[index].setTicketPrice(price);
-            fout.close();
-        }
+        double price;
+        cout << "Введите новую стоимость билета: ";
+        cin >> price;
+        flights[index].setTicketPrice(price);
+        saveFlights();
+        saveFlightsTxt();
     }
     else
     {

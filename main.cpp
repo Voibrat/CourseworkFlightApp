@@ -516,6 +516,7 @@ void emptyChecker() {
 }
 
 
+
 int main()
 {
     setlocale(LC_ALL, "Russian");

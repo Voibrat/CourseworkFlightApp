@@ -318,28 +318,28 @@ void searchFlights()
 // переписать для работы с векторами
 // Ввод данных для поиска и модификации производить с клавиатуры.
 // Выбор варианта модификации определяется из диалога.
-
+// upd: функция цундерит - меняет правильно, но говорит что неправильный номер
 void editTimeFlight()
 {
-    int index;
+    displayFlights();
+    string index;
+    bool flag = false;
     cout << "Введите наименование рейса рейса чтобы изменить время вылета: ";
     cin >> index;
-
-    if (index >= 0 && index < flights.size())
-    {
-        ofstream fout("flights.bin", ios::binary);
-
-        if (fout.is_open()) {
+    for (int i=0; i < flights.size(); i++) {
+        if (index == flights[i].getFlightName()) {
             string Time = "";
             cout << "Введите новое время вылета: ";
             cin >> Time;
-            flights[index].setDepartureTime(Time);
-            fout.close();
+            flights[i].setDepartureTime(Time);
+            saveFlights();
+            saveFlightsTxt();
+            flag = true;
+            break;
         }
     }
-    else
-    {
-        cout << "Неправильный номер." << endl;
+    if (flag != true) {
+        cout << "Неверное наименование рейса." << endl;
     }
 }
 

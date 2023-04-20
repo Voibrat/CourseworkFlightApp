@@ -156,7 +156,6 @@ public:
 
         fin.read((char*)&distance, sizeof(int));
         fin.read((char*)&ticket_price, sizeof(double));
-        fin.ignore(); //игнор ньюлайнов
     }
 
     //функции для записи и чтения в обычном формате
@@ -197,7 +196,7 @@ vector<Flight> flights;
 // нужно реализовать проверку на конец файла
 void loadFlights()
 {
-    ifstream fin("flights.bin", ios::binary | ios::in);
+    ifstream fin("flights.bin", ios::binary);
 
     if (fin.is_open())
     {
@@ -507,20 +506,21 @@ void findCheapestAndMostExpensive()
 void emptyChecker() {
     for (int i = 0; i < flights.size(); i++)
     {
-        if ((flights[i].getAirportName() != "") or (flights[i].getFlightName() != "") or (flights[i].getFlightNumber() != "")
-            or (flights[i].getDepartureTime() != "") or (flights[i].getDistance() != 0) or (flights[i].getTicketPrice() != 0.0))
+        if ((flights[i].getAirportName() != "") and (flights[i].getFlightName() != "") and (flights[i].getFlightNumber() != "")
+            and (flights[i].getDepartureTime() != "") and (flights[i].getDistance() != 0) and (flights[i].getTicketPrice() != 0.0))
         {
-            flights.pop_back();
+            //flights.pop_back();
+            flights.erase(flights.begin() + i);
         }
     }
 }
+
 
 
 int main()
 {
     setlocale(LC_ALL, "Russian");
 
-    loadFlights();
     int choiceLoad = 0;
 
     cout << "Выберите вариант чтения данных:" << endl;
@@ -531,10 +531,11 @@ int main()
 
     if (choiceLoad == 1) {
         loadFlightsTxt();
+        flights.pop_back();
     } else if (choiceLoad == 2){
         loadFlights();
         //удаляет последний элемент вектора классов, решает проблему пустых экземпляров класса FLight при чтении из файла
-        //flights.pop_back();
+        flights.pop_back();
     } else {
         cout << "Ошибка ввода, пожалуйста, попробуйте еще раз" << endl;
         return 0;
@@ -543,7 +544,7 @@ int main()
     //удаляет последний элемент вектора классов, частично решает проблему пустых экземпляров класса FLight при чтении из файла
     //flights.pop_back();
 
-    emptyChecker();
+    //emptyChecker();
 
     while (true)
     {

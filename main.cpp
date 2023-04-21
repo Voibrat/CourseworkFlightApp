@@ -314,56 +314,150 @@ void searchFlights()
         }
     }
 }
+
 // переписать для работы с векторами
+// Ввод данных для поиска и модификации производить с клавиатуры.
+// Выбор варианта модификации определяется из диалога.
+// upd: функция цундерит - меняет правильно, но говорит что неправильный номер
+// upd2: починил
 void editTimeFlight()
 {
-    int index;
-    cout << "Введите наименование рейса рейса чтобы изменить время вылета: ";
-    cin >> index;
+    string number;
+    bool flag = false;
 
-    if (index >= 0 && index < flights.size())
-    {
-        ofstream fout("flights.bin", ios::binary);
+    displayFlights();
 
-        if (fout.is_open()) {
+    cout << "Введите номер рейса рейса чтобы изменить время вылета: ";
+    cin >> number;
+
+    for (int i=0; i < flights.size(); i++) {
+        if (number == flights[i].getFlightNumber()) {
             string Time = "";
             cout << "Введите новое время вылета: ";
             cin >> Time;
-            flights[index].setDepartureTime(Time);
-            fout.close();
+            flights[i].setDepartureTime(Time);
+            saveFlights();
+            saveFlightsTxt();
+            flag = true;
+            break;
         }
     }
-    else
-    {
-        cout << "Неправильный номер." << endl;
+    if (flag != true) {
+        cout << "Неверный номер рейса." << endl;
     }
 }
 
 // переписать для работы с векторами
 void editPriceFlight()
 {
-    int index;
-    cout << "Введите индекс рейса чтобы изменить его стоимость: ";
-    cin >> index;
+    string name;
+    bool flag = false;
 
-    if (index >= 0 && index < flights.size())
+    displayFlights();
+
+    cout << "Введите наименование рейса чтобы изменить его стоимость: ";
+    cin >> name;
+
+
+    for (int i=0; i < flights.size(); i++)
     {
-        ofstream fout("flights.bin", ios::binary);
-
-        if (fout.is_open()) {
+        if (name == flights[i].getFlightName())
+        {
             double price;
             cout << "Введите новую стоимость билета: ";
             cin >> price;
-            flights[index].setTicketPrice(price);
-            fout.close();
+            flights[i].setTicketPrice(price);
+            saveFlights();
+            saveFlightsTxt();
         }
     }
-    else
-    {
-        cout << "Неправильный номер." << endl;
+    if (flag != true) {
+        cout << "Неверный номер рейса." << endl;
     }
 }
 
+// Модификация данных о рейсах ряда аэропортов.
+// Поиск производить по наименованию аэропорта и номеру рейса, модифицировать стоимость билета.
+// Данные для модификации вводить из файла данных для модификации,
+// в котором они хранятся смешанно по различным аэропортам.
+/*
+// upd: функция не читает/читает неправильно данные, так же после окончания завершает всю программу
+void modificationFlight()
+{
+    ifstream fin("modifications.txt", ios::in);
+    string name, number;
+    double price;
+    bool flag = false;
+
+    while (!fin.eof())
+    {
+        getline(fin, name);
+        getline(fin, number);
+        fin >> price;
+        for (int i=0; i < flights.size(); i++)
+        {
+            if (name == flights[i].getAirportName() and number == flights[i].getFlightNumber())
+            {
+                flights[i].setTicketPrice(price);
+                flag = true;
+                break;
+            } else
+            {
+                flag = false;
+            }
+        }
+        if (flag != true)
+        {
+            cout << "Аэропорт " << name << " и/или рейс " << number << " не были найдены." << endl;
+        }
+    }
+    fin.close();
+    saveFlightsTxt();
+    saveFlights();
+    cout << "Модификация окончена" << endl;
+}
+*/
+void modificationFlight()
+{
+    ifstream fin("modifications.txt");
+    if (!fin.is_open())
+    {
+        cout << "Ошибка открытия файла modifications.txt" << endl;
+        return;
+    }
+
+    string name, number;
+    double price;
+    cout << "Измененные аэропорты: " << endl;
+    cout << endl;
+    while (getline(fin, name) and getline(fin, number) and fin >> price)
+    {
+        fin.ignore();
+        bool found = false;
+        for (int i=0; i < flights.size(); i++)
+        {
+
+            if (name == flights[i].getAirportName() and number == flights[i].getFlightName())
+            {
+                flights[i].setTicketPrice(price);
+                found = true;
+                cout << i << ".";
+                flights[i].display();
+
+                break;
+            }
+        }
+        if (!found)
+        {
+            cout << "Аэропорт " << name << " и/или рейс " << number << " не были найдены." << endl;
+        }
+    }
+    fin.close();
+
+    saveFlightsTxt();
+    saveFlights();
+    cout << "Модификация окончена" << endl;
+}
 void deleteFlight()
 {
     int index;
@@ -559,10 +653,12 @@ int main()
         cout << "6. Удалить рейс" << endl;
         cout << "7. Найти самые короткий и длинный рейсы" << endl;
         cout << "8. Найти самые дешевые и самые дорогие авиабилеты" << endl;
-        cout << "9. Выход" << endl;
+        cout << "9. Модификация данных из файла" << endl;
+        cout << "10. Выход" << endl;
         cout << "Сделайте выбор: ";
 
         int choice;
+        string modChoice;
         cin >> choice;
         cout << endl;
         switch (choice)
@@ -592,8 +688,19 @@ int main()
                 findCheapestAndMostExpensive();
                 break;
             case 9:
-                exit(0);
+                /*
+                cout << "Вы уверены что хотите модифицировать данные из внешнего файла?" << endl;
+                cout << "Введите 1, чтобы хотите продолжить" << endl;
+                cout << "Введите любой символ, чтобы вернуться" << endl;
+                cin >> modChoice;
+                if (modChoice == "1") {
+                    modificationFlight();
+                } else break;
+                 */
+                modificationFlight();
                 break;
+            case 10:
+                exit(0);
             default:
                 cout << "Ошибка ввода" << endl;
                 break;

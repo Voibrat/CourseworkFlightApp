@@ -382,6 +382,7 @@ void editPriceFlight()
 // в котором они хранятся смешанно по различным аэропортам.
 /*
 // upd: функция не читает/читает неправильно данные, так же после окончания завершает всю программу
+// upd2: починил
 void modificationFlight()
 {
     ifstream fin("modifications.txt", ios::in);
@@ -620,6 +621,7 @@ int main()
     cout << "Выберите вариант чтения данных:" << endl;
     cout << "1. Из txt файла" << endl;
     cout << "2. Из bin файла" << endl;
+    cout << "Сделайте выбор: ";
     cin >> choiceLoad;
     cout << endl;
 
@@ -648,17 +650,16 @@ int main()
         cout << "1. Добавить рейс" << endl;
         cout << "2. Показать все рейсы" << endl;
         cout << "3. Поиск рейсов" << endl;
-        cout << "4. Редактировать стоимость билета" << endl;
-        cout << "5. Редактировать время вылета" << endl;
-        cout << "6. Удалить рейс" << endl;
-        cout << "7. Найти самые короткий и длинный рейсы" << endl;
-        cout << "8. Найти самые дешевые и самые дорогие авиабилеты" << endl;
-        cout << "9. Модификация данных из файла" << endl;
-        cout << "10. Выход" << endl;
+        cout << "4. Редактировать рейс" << endl;
+        cout << "5. Удалить рейс" << endl;
+        cout << "6. Найти самые короткий и длинный рейсы" << endl;
+        cout << "7. Найти самые дешевые и самые дорогие авиабилеты" << endl;
+        cout << "8. Модификация данных из файла" << endl;
+        cout << "9. Выход" << endl;
         cout << "Сделайте выбор: ";
 
         int choice;
-        string modChoice;
+        string modChoice, editChoice;
         cin >> choice;
         cout << endl;
         switch (choice)
@@ -673,33 +674,54 @@ int main()
                 searchFlights();
                 break;
             case 4:
-                editPriceFlight();
+                while (true)
+                {
+                    cout << "1. Изменить время вылета" << endl;
+                    cout << "2. Изменить цену авиабилета" << endl;
+                    cout << "3. Вернуться в меню" << endl;
+                    cout << "Сделайте выбор: ";
+                    cin >> editChoice;
+                    if (editChoice == "1")
+                    {
+                        editTimeFlight();
+                        break;
+                    } else if (editChoice == "2") {
+                        editPriceFlight();
+                        break;
+                    }  else if (editChoice == "3") {
+                        break;
+                    } else
+                    {
+                        cout << "Ошибка ввода." << endl;
+                    }
+                }
                 break;
             case 5:
-                editTimeFlight();
-                break;
-            case 6:
                 deleteFlight();
                 break;
-            case 7:
+            case 6:
                 findClosestAndFarthest();
                 break;
-            case 8:
+            case 7:
                 findCheapestAndMostExpensive();
                 break;
-            case 9:
-                /*
-                cout << "Вы уверены что хотите модифицировать данные из внешнего файла?" << endl;
-                cout << "Введите 1, чтобы хотите продолжить" << endl;
-                cout << "Введите любой символ, чтобы вернуться" << endl;
-                cin >> modChoice;
-                if (modChoice == "1") {
-                    modificationFlight();
-                } else break;
-                 */
-                modificationFlight();
+            case 8:
+                while (true) {
+                    cout << "Вы уверены что хотите модифицировать данные из внешнего файла?" << endl;
+                    cout << "1. Продолжить" << endl;
+                    cout << "2. Вернуться" << endl;
+                    cout << "Сделайте выбор: ";
+                    cin >> modChoice;
+                    if (modChoice == "1") {
+                        modificationFlight();
+                        break;
+                    } else if (modChoice == "2")
+                    {
+                        break;
+                    }else {cout << "Ошибка ввода" << endl;}
+                }
                 break;
-            case 10:
+            case 9:
                 exit(0);
             default:
                 cout << "Ошибка ввода" << endl;

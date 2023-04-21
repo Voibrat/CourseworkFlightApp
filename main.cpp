@@ -348,11 +348,6 @@ void editTimeFlight()
 }
 
 // переписать для работы с векторами
-// Модификация данных о рейсах ряда аэропортов.
-// Поиск производить по наименованию аэропорта и номеру рейса, модифицировать стоимость билета.
-// Данные для модификации вводить из файла данных для модификации,
-// в котором они хранятся смешанно по различным аэропортам.
-
 void editPriceFlight()
 {
     string name;
@@ -381,6 +376,88 @@ void editPriceFlight()
     }
 }
 
+// Модификация данных о рейсах ряда аэропортов.
+// Поиск производить по наименованию аэропорта и номеру рейса, модифицировать стоимость билета.
+// Данные для модификации вводить из файла данных для модификации,
+// в котором они хранятся смешанно по различным аэропортам.
+/*
+// upd: функция не читает/читает неправильно данные, так же после окончания завершает всю программу
+void modificationFlight()
+{
+    ifstream fin("modifications.txt", ios::in);
+    string name, number;
+    double price;
+    bool flag = false;
+
+    while (!fin.eof())
+    {
+        getline(fin, name);
+        getline(fin, number);
+        fin >> price;
+        for (int i=0; i < flights.size(); i++)
+        {
+            if (name == flights[i].getAirportName() and number == flights[i].getFlightNumber())
+            {
+                flights[i].setTicketPrice(price);
+                flag = true;
+                break;
+            } else
+            {
+                flag = false;
+            }
+        }
+        if (flag != true)
+        {
+            cout << "Аэропорт " << name << " и/или рейс " << number << " не были найдены." << endl;
+        }
+    }
+    fin.close();
+    saveFlightsTxt();
+    saveFlights();
+    cout << "Модификация окончена" << endl;
+}
+*/
+void modificationFlight()
+{
+    ifstream fin("modifications.txt");
+    if (!fin.is_open())
+    {
+        cout << "Ошибка открытия файла modifications.txt" << endl;
+        return;
+    }
+
+    string name, number;
+    double price;
+    cout << "Измененные аэропорты: " << endl;
+    cout << endl;
+    while (getline(fin, name) and getline(fin, number) and fin >> price)
+    {
+        fin.ignore();
+        bool found = false;
+        for (int i=0; i < flights.size(); i++)
+        {
+
+            if (name == flights[i].getAirportName() and number == flights[i].getFlightName())
+            {
+                flights[i].setTicketPrice(price);
+                found = true;
+                cout << i << ".";
+                flights[i].display();
+
+                break;
+            }
+        }
+        if (!found)
+        {
+            cout << "Аэропорт " << name << " и/или рейс " << number << " не были найдены." << endl;
+        }
+    }
+    fin.close();
+
+    saveFlightsTxt();
+    saveFlights();
+    cout << "Модификация окончена" << endl;
+}
 void deleteFlight()
 {
     int index;
@@ -576,10 +653,12 @@ int main()
         cout << "6. Удалить рейс" << endl;
         cout << "7. Найти самые короткий и длинный рейсы" << endl;
         cout << "8. Найти самые дешевые и самые дорогие авиабилеты" << endl;
-        cout << "9. Выход" << endl;
+        cout << "9. Модификация данных из файла" << endl;
+        cout << "10. Выход" << endl;
         cout << "Сделайте выбор: ";
 
         int choice;
+        string modChoice;
         cin >> choice;
         cout << endl;
         switch (choice)
@@ -609,8 +688,19 @@ int main()
                 findCheapestAndMostExpensive();
                 break;
             case 9:
-                exit(0);
+                /*
+                cout << "Вы уверены что хотите модифицировать данные из внешнего файла?" << endl;
+                cout << "Введите 1, чтобы хотите продолжить" << endl;
+                cout << "Введите любой символ, чтобы вернуться" << endl;
+                cin >> modChoice;
+                if (modChoice == "1") {
+                    modificationFlight();
+                } else break;
+                 */
+                modificationFlight();
                 break;
+            case 10:
+                exit(0);
             default:
                 cout << "Ошибка ввода" << endl;
                 break;

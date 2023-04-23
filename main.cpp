@@ -9,7 +9,7 @@ class Flight
 {
 private:
     string airport_name, flight_name, flight_number, departure_time;
-    int distance;
+    int distance, chairs_amount;
     double ticket_price;
 
 public:
@@ -20,6 +20,7 @@ public:
         flight_number = "";
         departure_time = "";
         distance = 0;
+        chairs_amount = 0;
         ticket_price = 0.0;
 
     }
@@ -43,6 +44,11 @@ public:
     void setDepartureTime(string time)
     {
         departure_time = time;
+    }
+
+    void setChairsAmount(int c)
+    {
+        chairs_amount = c;
     }
 
     void setDistance(int d)
@@ -76,6 +82,11 @@ public:
         return departure_time;
     }
 
+    int getChairsAmount()
+    {
+        return chairs_amount;
+    }
+
     int getDistance()
     {
         return distance;
@@ -97,6 +108,8 @@ public:
         cin >> flight_number;
         cout << "Введите время вылета: ";
         cin >> departure_time;
+        cout << "Введите количество кресел: ";
+        cin >> chairs_amount;
         cout << "Введите дистанцию: ";
         cin >> distance;
         cout << "Введите цену билета: ";
@@ -122,6 +135,7 @@ public:
         fout.write((char*)&len, sizeof(int));
         fout.write(departure_time.c_str(), len);
 
+        fout.write((char*)&chairs_amount, sizeof(int));
         fout.write((char*)&distance, sizeof(int));
         fout.write((char*)&ticket_price, sizeof(double));
     }
@@ -156,6 +170,7 @@ public:
         departure_time = value;
         delete[] value;
 
+        fin.read((char*)&chairs_amount, sizeof(int));
         fin.read((char*)&distance, sizeof(int));
         fin.read((char*)&ticket_price, sizeof(double));
     }
@@ -166,6 +181,7 @@ public:
         fout << flight_name << endl;
         fout << flight_number << endl;
         fout << departure_time << endl;
+        fout << chairs_amount << endl;
         fout << distance << endl;
         fout << ticket_price << endl;
     }
@@ -175,6 +191,7 @@ public:
         getline(fin, flight_name);
         getline(fin, flight_number);
         getline(fin, departure_time);
+        fin >> chairs_amount;
         fin >> distance;
         fin >> ticket_price;
         fin.ignore(); //игнор ньюлайнов
@@ -187,6 +204,7 @@ public:
         cout << "  Наименование рейса: " << flight_name << endl;
         cout << "  Номер рейса: " << flight_number << endl;
         cout << "  Время вылета: " << departure_time << endl;
+        cout << "  Количество кресел: " << chairs_amount << endl;
         cout << "  Расстояние: " << distance << " км" << endl;
         cout << "  Цена билета: " << ticket_price << " $" << endl;
         cout << endl;

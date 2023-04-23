@@ -2,7 +2,9 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+
 using namespace std;
+
 class Flight
 {
 private:
@@ -102,7 +104,7 @@ public:
     }
 
     //запись для бинарников
-    void write(ofstream &fout)
+    void write(ofstream& fout)
     {
         int len = airport_name.length();
         fout.write((char*)&len, sizeof(int));
@@ -125,7 +127,7 @@ public:
     }
 
     //чтение для бинарников
-    void read(ifstream &fin)
+    void read(ifstream& fin)
     {
         int len;
         char* value;
@@ -184,7 +186,7 @@ public:
         cout << "Название Аэропорта: " << airport_name << endl;
         cout << "  Наименование рейса: " << flight_name << endl;
         cout << "  Номер рейса: " << flight_number << endl;
-        cout <<"  Время вылета: " << departure_time << endl;
+        cout << "  Время вылета: " << departure_time << endl;
         cout << "  Расстояние: " << distance << " км" << endl;
         cout << "  Цена билета: " << ticket_price << " $" << endl;
         cout << endl;
@@ -212,24 +214,24 @@ void loadFlights()
 }
 
 // для бинарников
-    void saveFlights()
+void saveFlights()
+{
+    ofstream fout("flights.bin", ios::binary | ios::trunc);
+
+    if (fout.is_open())
     {
-        ofstream fout("flights.bin", ios::binary | ios::trunc);
-
-        if (fout.is_open())
+        for (int i = 0; i < flights.size(); i++)
         {
-            for (int i = 0; i < flights.size(); i++)
-            {
-                if ((flights[i].getAirportName() != "") and (flights[i].getFlightName() != "") and (flights[i].getFlightNumber() != "")
+            if ((flights[i].getAirportName() != "") and (flights[i].getFlightName() != "") and (flights[i].getFlightNumber() != "")
                 and (flights[i].getDepartureTime() != "") and (flights[i].getDistance() != 0) and (flights[i].getTicketPrice() != 0.0))
-                {
-                    flights[i].write(fout);
-                }
+            {
+                flights[i].write(fout);
             }
-
-            fout.close();
         }
+
+        fout.close();
     }
+}
 // нужно реализовать проверку на конец файла
 // для тхт
 void loadFlightsTxt() {
@@ -256,7 +258,7 @@ void saveFlightsTxt() {
         for (int i = 0; i < flights.size(); i++)
         {
             if ((flights[i].getAirportName() != "") and (flights[i].getFlightName() != "") and (flights[i].getFlightNumber() != "")
-            and (flights[i].getDepartureTime() != "") and (flights[i].getDistance() != 0) and (flights[i].getTicketPrice() != 0.0))
+                and (flights[i].getDepartureTime() != "") and (flights[i].getDistance() != 0) and (flights[i].getTicketPrice() != 0.0))
             {
                 flights[i].write_text(fout);
             }
@@ -322,6 +324,7 @@ void searchFlights()
 // upd2: починил
 void editTimeFlight()
 {
+    setlocale(LC_ALL, "Russian");
     string number;
     bool flag = false;
 
@@ -330,7 +333,7 @@ void editTimeFlight()
     cout << "Введите номер рейса рейса чтобы изменить время вылета: ";
     cin >> number;
 
-    for (int i=0; i < flights.size(); i++) {
+    for (int i = 0; i < flights.size(); i++) {
         if (number == flights[i].getFlightNumber()) {
             string Time = "";
             cout << "Введите новое время вылета: ";
@@ -359,7 +362,7 @@ void editPriceFlight()
     cin >> name;
 
 
-    for (int i=0; i < flights.size(); i++)
+    for (int i = 0; i < flights.size(); i++)
     {
         if (name == flights[i].getFlightName())
         {
@@ -435,7 +438,7 @@ void modificationFlight()
     {
         fin.ignore();
         bool found = false;
-        for (int i=0; i < flights.size(); i++)
+        for (int i = 0; i < flights.size(); i++)
         {
 
             if (name == flights[i].getAirportName() and number == flights[i].getFlightName())
@@ -627,12 +630,20 @@ int main()
 
     if (choiceLoad == 1) {
         loadFlightsTxt();
-        flights.pop_back();
-    } else if (choiceLoad == 2){
+        if (!flights.empty())
+        {
+            flights.pop_back();
+        }
+    }
+    else if (choiceLoad == 2) {
         loadFlights();
         //удаляет последний элемент вектора классов, решает проблему пустых экземпляров класса FLight при чтении из файла
-        flights.pop_back();
-    } else {
+        if (!flights.empty())
+        {
+            flights.pop_back();
+        }
+    }
+    else {
         cout << "Ошибка ввода, пожалуйста, попробуйте еще раз" << endl;
         return 0;
     }
@@ -685,12 +696,15 @@ int main()
                     {
                         editTimeFlight();
                         break;
-                    } else if (editChoice == "2") {
+                    }
+                    else if (editChoice == "2") {
                         editPriceFlight();
                         break;
-                    }  else if (editChoice == "3") {
+                    }
+                    else if (editChoice == "3") {
                         break;
-                    } else
+                    }
+                    else
                     {
                         cout << "Ошибка ввода." << endl;
                     }
@@ -715,10 +729,12 @@ int main()
                     if (modChoice == "1") {
                         modificationFlight();
                         break;
-                    } else if (modChoice == "2")
+                    }
+                    else if (modChoice == "2")
                     {
                         break;
-                    }else {cout << "Ошибка ввода" << endl;}
+                    }
+                    else { cout << "Ошибка ввода" << endl; }
                 }
                 break;
             case 9:

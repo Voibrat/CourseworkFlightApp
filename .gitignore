@@ -1,4 +1,6 @@
-/cmake-build-debug/flights.txt
-/cmake-build-debug/flights.bin
+/cmake-build-debug
 flights.bin
 flights.txt
+modifications.txt
+/.idea
+/.DS_Store

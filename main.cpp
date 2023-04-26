@@ -213,6 +213,7 @@ public:
         departure_time = value;
         delete[] value;
 
+        /*
         // Считываем данные в буфер
         char* buffer = new char[sizeof(int)];
 
@@ -255,7 +256,10 @@ public:
         // Освобождаем память
         delete[] buffer;
         delete[] buffer_double;
-
+        */
+        fin.read((char*)&chairs_amount, sizeof(int));
+        fin.read((char*)&distance, sizeof(int));
+        fin.read((char*)&ticket_price, sizeof(double));
     }
 
     //функции для записи и чтения в обычном формате

@@ -98,6 +98,22 @@ public:
     }
 
     // Функции
+    /*
+    int getValue(std::string query)
+    {
+        int value;
+        std::cout << query.c_str();
+        while(!(std::cin >> value))
+        {
+            if(std::cin.eof())
+            { throw "eof"; }
+            std::cin.clear(); // Сбрасываем флаг ошибки, если таковая была
+            std::cin.ignore(1000,'\n'); // Игнорируем оставшиеся в потоке данные
+            std::cout << "Try again: ";
+        }
+        return value;
+    }
+    */
     void read()
     {
         cout << "Введите название аэропорта: ";
@@ -108,12 +124,39 @@ public:
         cin >> flight_number;
         cout << "Введите время вылета: ";
         cin >> departure_time;
-        cout << "Введите количество кресел: ";
-        cin >> chairs_amount;
-        cout << "Введите дистанцию: ";
-        cin >> distance;
-        cout << "Введите цену билета: ";
-        cin >> ticket_price;
+
+        // Проверка на правильный ввод chairs_amount
+        while (true) {
+            cout << "Введите количество кресел: ";
+            if (cin >> chairs_amount) {
+                break;
+            }
+            cout << "Некорректный ввод, повторите попытку.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+
+        // Проверка на правильный ввод distance
+        while (true) {
+            cout << "Введите дистанцию: ";
+            if (cin >> distance) {
+                break;
+            }
+            cout << "Некорректный ввод, повторите попытку.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+
+        // Проверка на правильный ввод ticket_price
+        while (true) {
+            cout << "Введите цену билета: ";
+            if (cin >> ticket_price) {
+                break;
+            }
+            cout << "Некорректный ввод, повторите попытку.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
     }
 
     //запись для бинарников
@@ -170,9 +213,49 @@ public:
         departure_time = value;
         delete[] value;
 
-        fin.read((char*)&chairs_amount, sizeof(int));
-        fin.read((char*)&distance, sizeof(int));
-        fin.read((char*)&ticket_price, sizeof(double));
+        // Считываем данные в буфер
+        char* buffer = new char[sizeof(int)];
+
+        // Считываем chairs_amount
+        fin.read(buffer, sizeof(int));
+        while (!fin.eof() && fin.good()) {
+            if (fin.gcount() == sizeof(int)) {
+                chairs_amount = *reinterpret_cast<int *>(buffer);
+                break;
+            }
+            fin.clear();
+            fin.read(buffer + fin.gcount(), sizeof(int) - fin.gcount());
+        }
+
+        // Считываем distance
+        fin.read(buffer, sizeof(int));
+        while (!fin.eof() && fin.good()) {
+            if (fin.gcount() == sizeof(int)) {
+                distance = *reinterpret_cast<int *>(buffer);
+                break;
+            }
+            fin.clear();
+            fin.read(buffer + fin.gcount(), sizeof(int) - fin.gcount());
+        }
+
+        // Считываем данные в буфер
+        char *buffer_double = new char[sizeof(double)];
+
+        // Считываем ticket_price
+        fin.read(buffer_double, sizeof(double));
+        while (!fin.eof() && fin.good()) {
+            if (fin.gcount() == sizeof(double)) {
+                ticket_price = *reinterpret_cast<double *>(buffer_double);
+                break;
+            }
+            fin.clear();
+            fin.read(buffer_double + fin.gcount(), sizeof(double) - fin.gcount());
+        }
+
+        // Освобождаем память
+        delete[] buffer;
+        delete[] buffer_double;
+
     }
 
     //функции для записи и чтения в обычном формате
@@ -188,12 +271,26 @@ public:
 
     void read_text(ifstream& fin) {
         getline(fin, airport_name);
+        if (airport_name.empty()) {
+            return;
+        }
         getline(fin, flight_name);
         getline(fin, flight_number);
         getline(fin, departure_time);
-        fin >> chairs_amount;
-        fin >> distance;
-        fin >> ticket_price;
+
+        if (!(fin >> chairs_amount)) {
+            cout << "Часть введенных данных некорректна, проверьте данные в файле" << endl;
+            return;
+        }
+        if (!(fin >> distance)) {
+            cout << "Часть введенных данных некорректна, проверьте данные в файле" << endl;
+            return;
+        }
+        if (!(fin >> ticket_price)) {
+            cout << "Часть введенных данных некорректна, проверьте данные в файле" << endl;
+            return;
+        }
+
         fin.ignore(); //игнор ньюлайнов
     }
 
@@ -224,7 +321,11 @@ void loadFlights()
         {
             Flight f;
             f.read(fin);
-            flights.push_back(f);
+            if (f.getAirportName() != "")
+            {
+                flights.push_back(f);
+            }
+
         }
 
         fin.close();
@@ -261,7 +362,10 @@ void loadFlightsTxt() {
         {
             Flight f;
             f.read_text(fin);
-            flights.push_back(f);
+            if (f.getAirportName() != "")
+            {
+                flights.push_back(f);
+            }
         }
 
         fin.close();
@@ -650,7 +754,7 @@ int main()
         loadFlightsTxt();
         if (!flights.empty())
         {
-            flights.pop_back();
+            //flights.pop_back();
         }
     }
     else if (choiceLoad == 2) {
@@ -658,7 +762,7 @@ int main()
         //удаляет последний элемент вектора классов, решает проблему пустых экземпляров класса FLight при чтении из файла
         if (!flights.empty())
         {
-            flights.pop_back();
+            //flights.pop_back();
         }
     }
     else {

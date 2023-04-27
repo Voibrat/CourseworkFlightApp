@@ -216,7 +216,6 @@ public:
         /*
         // Считываем данные в буфер
         char* buffer = new char[sizeof(int)];
-
         // Считываем chairs_amount
         fin.read(buffer, sizeof(int));
         while (!fin.eof() && fin.good()) {
@@ -227,7 +226,6 @@ public:
             fin.clear();
             fin.read(buffer + fin.gcount(), sizeof(int) - fin.gcount());
         }
-
         // Считываем distance
         fin.read(buffer, sizeof(int));
         while (!fin.eof() && fin.good()) {
@@ -238,10 +236,8 @@ public:
             fin.clear();
             fin.read(buffer + fin.gcount(), sizeof(int) - fin.gcount());
         }
-
         // Считываем данные в буфер
         char *buffer_double = new char[sizeof(double)];
-
         // Считываем ticket_price
         fin.read(buffer_double, sizeof(double));
         while (!fin.eof() && fin.good()) {
@@ -252,7 +248,6 @@ public:
             fin.clear();
             fin.read(buffer_double + fin.gcount(), sizeof(double) - fin.gcount());
         }
-
         // Освобождаем память
         delete[] buffer;
         delete[] buffer_double;
@@ -423,25 +418,27 @@ void searchFlights()
     cin >> flight_name;
     cout << "Введите время вылета (или введите 'any' для отображения любого): ";
     cin >> departure_time;
-    cout << "Введите цену билета(или введите '-1' для любой цены): ";
-    cin >> ticket_price;
+    cout << "Введите стоимость билета (или введите '-1' для любой цены): ";
+    if (!(cin >> ticket_price)) {
+        cout << "Ошибка ввода." << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        return;
+    }
 
-    cout << endl;
-
-    for (int i = 0; i < flights.size(); i++)
-    {
-        if (flight_name == "any" || flights[i].getFlightName() == flight_name)
-        {
-            if (departure_time == "any" || flights[i].getDepartureTime() == departure_time)
-            {
-                if (ticket_price == -1 || flights[i].getTicketPrice() == ticket_price)
-                {
+    for (int i = 0; i < flights.size(); i++) {
+        if (flight_name == "any" || departure_time == "Any" || departure_time == "ANY" ||
+            flights[i].getFlightName() == flight_name) {
+            if (departure_time == "any" || departure_time == "Any" || departure_time == "ANY" ||
+                flights[i].getDepartureTime() == departure_time) {
+                if (ticket_price == -1 || flights[i].getTicketPrice() == ticket_price) {
                     flights[i].display();
                 }
             }
         }
     }
 }
+
 
 // переписать для работы с векторами
 // Ввод данных для поиска и модификации производить с клавиатуры.
@@ -518,7 +515,6 @@ void modificationFlight()
     string name, number;
     double price;
     bool flag = false;
-
     while (!fin.eof())
     {
         getline(fin, name);
@@ -590,6 +586,7 @@ void modificationFlight()
 }
 void deleteFlight()
 {
+    displayFlights();
     int index;
     cout << "Введите индекс рейса чтобы удалить его: ";
     cin >> index;
@@ -633,8 +630,10 @@ void findClosestAndFarthest()
         }
 
         cout << "Самый короткий перелет: " << endl;
+        cout << "  ";
         flights[min_index].display();
         cout << "Самый длинный перелет: " << endl;
+        cout << "  ";
         flights[max_index].display();
     }
     else
@@ -660,9 +659,11 @@ void findClosestAndFarthest()
             }
         }
 
-        cout << "Самый короткий перелет: ";
+        cout << "Самый короткий перелет: " << endl;
+        cout << "  ";
         flights[min_index].display();
-        cout << "Самый длинный перелет: ";
+        cout << "Самый длинный перелет: " << endl;
+        cout << "  ";
         flights[max_index].display();
     }
 }
@@ -693,9 +694,11 @@ void findCheapestAndMostExpensive()
             }
         }
 
-        cout << "Самый дешевый авиабилет: ";
+        cout << "Самый дешевый авиабилет: " << endl;
+        cout << "  ";
         flights[min_index].display();
-        cout << "Самый дорогой авиабилет: ";
+        cout << "Самый дорогой авиабилет: " << endl;
+        cout << "  ";
         flights[max_index].display();
     }
     else
@@ -722,8 +725,10 @@ void findCheapestAndMostExpensive()
         }
 
         cout << "Самый дешевый авиабилет: ";
+        cout << "  ";
         flights[min_index].display();
         cout << "Самый дорогой авиабилет: ";
+        cout << "  ";
         flights[max_index].display();
     }
 }
@@ -802,7 +807,22 @@ int main()
         switch (choice)
         {
             case 1:
-                addFlight();
+                while (true) {
+                    cout << "Вы уверены что хотите продолжить?" << endl;
+                    cout << "1. Продолжить" << endl;
+                    cout << "2. Вернуться" << endl;
+                    cout << "Сделайте выбор: ";
+                    cin >> modChoice;
+                    if (modChoice == "1") {
+                        addFlight();
+                        break;
+                    }
+                    else if (modChoice == "2")
+                    {
+                        break;
+                    }
+                    else { cout << "Ошибка ввода" << endl; }
+                }
                 break;
             case 2:
                 displayFlights();
@@ -837,8 +857,24 @@ int main()
                 }
                 break;
             case 5:
-                deleteFlight();
+                while (true) {
+                    cout << "Вы уверены что хотите продолжить?" << endl;
+                    cout << "1. Продолжить" << endl;
+                    cout << "2. Вернуться" << endl;
+                    cout << "Сделайте выбор: ";
+                    cin >> modChoice;
+                    if (modChoice == "1") {
+                        deleteFlight();
+                        break;
+                    }
+                    else if (modChoice == "2")
+                    {
+                        break;
+                    }
+                    else { cout << "Ошибка ввода" << endl; }
+                }
                 break;
+
             case 6:
                 findClosestAndFarthest();
                 break;

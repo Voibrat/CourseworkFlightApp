@@ -555,7 +555,7 @@ void modificationFlight()
 
     string name, number;
     double price;
-    cout << "Измененные аэропорты: " << endl;
+    cout << "Измененные рейсы: " << endl;
     cout << endl;
     while (getline(fin, name) and getline(fin, number) and fin >> price)
     {

@@ -432,6 +432,7 @@ void searchFlights()
             if (departure_time == "any" || departure_time == "Any" || departure_time == "ANY" ||
                 flights[i].getDepartureTime() == departure_time) {
                 if (ticket_price == -1 || flights[i].getTicketPrice() == ticket_price) {
+                    cout << "  ";
                     flights[i].display();
                 }
             }
@@ -586,6 +587,7 @@ void modificationFlight()
 }
 void deleteFlight()
 {
+    cout << "  " << endl;
     displayFlights();
     int index;
     cout << "Введите индекс рейса чтобы удалить его: ";
@@ -813,6 +815,7 @@ int main()
                     cout << "2. Вернуться" << endl;
                     cout << "Сделайте выбор: ";
                     cin >> modChoice;
+                    cout << "  " << endl;
                     if (modChoice == "1") {
                         addFlight();
                         break;

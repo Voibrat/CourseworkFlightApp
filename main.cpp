@@ -581,6 +581,10 @@ void modificationFlight()
     }
     fin.close();
 
+    ofstream fout("modifications.txt");
+    fout.write("", 0);
+    fout.close();
+
     saveFlightsTxt();
     saveFlights();
     cout << "Модификация окончена" << endl;

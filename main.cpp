@@ -107,8 +107,8 @@ public:
         {
             if(std::cin.eof())
             { throw "eof"; }
-            std::cin.clear(); // Сбрасываем флаг ошибки, если таковая была
-            std::cin.ignore(1000,'\n'); // Игнорируем оставшиеся в потоке данные
+            std::cin.clear();
+            std::cin.ignore(1000,'\n');
             std::cout << "Try again: ";
         }
         return value;
@@ -213,45 +213,6 @@ public:
         departure_time = value;
         delete[] value;
 
-        /*
-        // Считываем данные в буфер
-        char* buffer = new char[sizeof(int)];
-        // Считываем chairs_amount
-        fin.read(buffer, sizeof(int));
-        while (!fin.eof() && fin.good()) {
-            if (fin.gcount() == sizeof(int)) {
-                chairs_amount = *reinterpret_cast<int *>(buffer);
-                break;
-            }
-            fin.clear();
-            fin.read(buffer + fin.gcount(), sizeof(int) - fin.gcount());
-        }
-        // Считываем distance
-        fin.read(buffer, sizeof(int));
-        while (!fin.eof() && fin.good()) {
-            if (fin.gcount() == sizeof(int)) {
-                distance = *reinterpret_cast<int *>(buffer);
-                break;
-            }
-            fin.clear();
-            fin.read(buffer + fin.gcount(), sizeof(int) - fin.gcount());
-        }
-        // Считываем данные в буфер
-        char *buffer_double = new char[sizeof(double)];
-        // Считываем ticket_price
-        fin.read(buffer_double, sizeof(double));
-        while (!fin.eof() && fin.good()) {
-            if (fin.gcount() == sizeof(double)) {
-                ticket_price = *reinterpret_cast<double *>(buffer_double);
-                break;
-            }
-            fin.clear();
-            fin.read(buffer_double + fin.gcount(), sizeof(double) - fin.gcount());
-        }
-        // Освобождаем память
-        delete[] buffer;
-        delete[] buffer_double;
-        */
         fin.read((char*)&chairs_amount, sizeof(int));
         fin.read((char*)&distance, sizeof(int));
         fin.read((char*)&ticket_price, sizeof(double));
@@ -503,47 +464,6 @@ void editPriceFlight()
     }
 }
 
-// Модификация данных о рейсах ряда аэропортов.
-// Поиск производить по наименованию аэропорта и номеру рейса, модифицировать стоимость билета.
-// Данные для модификации вводить из файла данных для модификации,
-// в котором они хранятся смешанно по различным аэропортам.
-/*
-// upd: функция не читает/читает неправильно данные, так же после окончания завершает всю программу
-// upd2: починил
-void modificationFlight()
-{
-    ifstream fin("modifications.txt", ios::in);
-    string name, number;
-    double price;
-    bool flag = false;
-    while (!fin.eof())
-    {
-        getline(fin, name);
-        getline(fin, number);
-        fin >> price;
-        for (int i=0; i < flights.size(); i++)
-        {
-            if (name == flights[i].getAirportName() and number == flights[i].getFlightNumber())
-            {
-                flights[i].setTicketPrice(price);
-                flag = true;
-                break;
-            } else
-            {
-                flag = false;
-            }
-        }
-        if (flag != true)
-        {
-            cout << "Аэропорт " << name << " и/или рейс " << number << " не были найдены." << endl;
-        }
-    }
-    fin.close();
-    saveFlightsTxt();
-    saveFlights();
-    cout << "Модификация окончена" << endl;
-}
-*/
 void modificationFlight()
 {
     ifstream fin("modifications.txt");
@@ -589,6 +509,7 @@ void modificationFlight()
     saveFlights();
     cout << "Модификация окончена" << endl;
 }
+
 void deleteFlight()
 {
     cout << "  " << endl;

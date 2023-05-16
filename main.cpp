@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+#include <set>
 
 using namespace std;
 
@@ -293,24 +294,33 @@ void loadFlights()
 }
 
 // для бинарников
+vector <string> files;
+
 void saveFlights()
 {
-    ofstream fout("flights.bin", ios::binary | ios::trunc);
 
-    if (fout.is_open())
+    for (int i = 0; i < flights.size(); ++i)
     {
-        for (int i = 0; i < flights.size(); i++)
-        {
-            if ((flights[i].getAirportName() != "") and (flights[i].getFlightName() != "") and (flights[i].getFlightNumber() != "")
-                and (flights[i].getDepartureTime() != "") and (flights[i].getDistance() != 0) and (flights[i].getTicketPrice() != 0.0))
-            {
-                flights[i].write(fout);
-            }
-        }
+        string airport_name = flights[i].getAirportName();
+        string file_name = airport_name + ".bin";
 
-        fout.close();
+        ofstream fout(file_name, ios::binary | ios::trunc);
+        files.push_back(file_name);
+        if (fout.is_open())
+        {
+            flights[i].write(fout);
+            fout.close();
+        }
+        else
+        {
+            cerr << "Невозможно открыть файл " << file_name << endl;
+        }
     }
+    ofstream fout("files.txt");
+
 }
+
+
 // нужно реализовать проверку на конец файла
 // для тхт
 void loadFlightsTxt() {

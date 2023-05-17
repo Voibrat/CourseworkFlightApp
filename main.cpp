@@ -331,7 +331,7 @@ void loadFlights()
 
 
 
-
+// Не работает trunc
 void saveFlights()
 {
     filesystem::path folder_name = "airports";
@@ -343,7 +343,7 @@ void saveFlights()
         filesystem::path file_name = (airport_name.string() + ".bin");
 
         ofstream fout(folder_name / file_name, ios::binary);
-        files.push_back(file_name);
+        files.push_back(folder_name / file_name);
         if (fout.is_open())
         {
             flights[i].write(fout);

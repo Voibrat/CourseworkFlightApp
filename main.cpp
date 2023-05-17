@@ -3,6 +3,7 @@
 #include <vector>
 #include <sstream>
 #include <set>
+#include <filesystem>
 
 using namespace std;
 
@@ -100,17 +101,17 @@ public:
 
     // Функции
     /*
-    int getValue(std::string query)
+    int getValue(string query)
     {
         int value;
-        std::cout << query.c_str();
-        while(!(std::cin >> value))
+        cout << query.c_str();
+        while(!(cin >> value))
         {
-            if(std::cin.eof())
+            if(cin.eof())
             { throw "eof"; }
-            std::cin.clear();
-            std::cin.ignore(1000,'\n');
-            std::cout << "Try again: ";
+            cin.clear();
+            cin.ignore(1000,'\n');
+            cout << "Try again: ";
         }
         return value;
     }
@@ -268,16 +269,41 @@ public:
         cout << endl;
     }
 };
-
+// для бинарников
 vector<Flight> flights;
+vector <string> files;
 
 // нужно реализовать проверку на конец файла
 void loadFlights()
 {
-    ifstream fin("flights.bin", ios::binary);
+    files.clear();
+    flights.clear();
 
-    if (fin.is_open())
+    filesystem::path list_file_name = "files.txt";
+    ifstream list_in(list_file_name);
+
+    if (!list_in.is_open())
     {
+        cerr << endl << "Невозможно открыть файл " << list_file_name;
+        return;
+    }
+
+    string file_path;
+    while (getline(list_in, file_path))
+    {
+        files.push_back(file_path);
+    }
+    list_in.close();
+
+    for (int i = 0; i < files.size(); ++i)
+    {
+        ifstream fin(files[i], ios::binary);
+        if (!fin.is_open())
+        {
+            cerr << endl << "Невозможно открыть файл " << files[i];
+            continue;
+        }
+
         while (!fin.eof())
         {
             Flight f;
@@ -286,25 +312,37 @@ void loadFlights()
             {
                 flights.push_back(f);
             }
-
         }
 
         fin.close();
     }
+
+    // удаление файлов
+    for (auto& file_path : files)
+    {
+        filesystem::remove(file_path);
+    }
+    if (filesystem::is_empty("airports"))
+    {
+        filesystem::remove("airports");
+    }
+
 }
 
-// для бинарников
-vector <string> files;
+
+
 
 void saveFlights()
 {
+    filesystem::path folder_name = "airports";
+
 
     for (int i = 0; i < flights.size(); ++i)
     {
-        string airport_name = flights[i].getAirportName();
-        string file_name = airport_name + ".bin";
+        filesystem::path airport_name = flights[i].getAirportName();
+        filesystem::path file_name = (airport_name.string() + ".bin");
 
-        ofstream fout(file_name, ios::binary | ios::trunc);
+        ofstream fout(folder_name / file_name, ios::binary);
         files.push_back(file_name);
         if (fout.is_open())
         {
@@ -313,12 +351,27 @@ void saveFlights()
         }
         else
         {
-            cerr << "Невозможно открыть файл " << file_name << endl;
+            cerr << endl << "Невозможно открыть файл " << file_name;
         }
     }
-    ofstream fout("files.txt");
 
+
+    filesystem::path list_file_name = "files.txt";
+    ofstream list_out(list_file_name, ios::trunc); // открытие файла с очисткой содержимого
+    if (list_out.is_open())
+    {
+        for (int i = 0; i < files.size(); ++i)
+        {
+            list_out << files[i] << endl;
+        }
+        list_out.close();
+    }
+    else
+    {
+        cerr << "Невозможно открыть файл " << list_file_name << endl;
+    }
 }
+
 
 
 // нужно реализовать проверку на конец файла
@@ -357,6 +410,21 @@ void saveFlightsTxt() {
         }
 
         fout.close();
+
+        filesystem::path list_file_name = "files.txt";
+        ofstream list_out(list_file_name);
+        if (list_out.is_open())
+        {
+            for (int i = 0; i < files.size(); ++i)
+            {
+                list_out << files[i] << endl;
+            }
+            list_out.close();
+        }
+        else
+        {
+            cout << "Невозможно открыть файл " << list_file_name << endl;
+        }
     }
 }
 
@@ -838,6 +906,8 @@ int main()
                 }
                 break;
             case 9:
+                saveFlights();
+                saveFlightsTxt();
                 exit(0);
             default:
                 cout << "Ошибка ввода" << endl;

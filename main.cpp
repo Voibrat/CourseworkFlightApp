@@ -4,8 +4,11 @@
 #include <sstream>
 #include <set>
 #include <filesystem>
+#include <locale.h>
 
 using namespace std;
+
+namespace fs = std::filesystem;
 
 class Flight
 {
@@ -279,7 +282,7 @@ void loadFlights()
     files.clear();
     flights.clear();
 
-    filesystem::path list_file_name = "files.txt";
+    fs::path list_file_name = "files.txt";
     ifstream list_in(list_file_name);
 
     if (!list_in.is_open())
@@ -320,17 +323,16 @@ void loadFlights()
     // удаление файлов
     for (auto& file_path : files)
     {
-        filesystem::remove(file_path);
+        fs::remove(file_path);
     }
 
 
-    if (filesystem::is_empty("airports"))
+    if (fs::is_empty("airports"))
     {
-        filesystem::remove("airports");
+        fs:remove("airports");
     }
 
 }
-
 
 
 // Не работает trunc
@@ -338,16 +340,18 @@ void saveFlights()
 {
     files.clear();
 
-    filesystem::path folder_name = "airports";
+    fs::path folder_name = "airports";
 
     for (int i = 0; i < flights.size(); ++i)
     {
-        filesystem::path airport_name = flights[i].getAirportName();
-        filesystem::path file_name = (airport_name.string() + ".bin");
+        fs::path airport_name = flights[i].getAirportName();
+        fs::path file_name = (airport_name.string() + ".bin");
 
         ofstream fout(folder_name / file_name, ios::binary);
-        std::filesystem::path new_file = folder_name / file_name;
-        files.push_back(folder_name / file_name);
+
+        fs::path new_file = folder_name / file_name;
+        files.push_back((new_file).string());
+
 
         if (fout.is_open())
         {
@@ -362,7 +366,7 @@ void saveFlights()
 
 
 
-    filesystem::path list_file_name = "files.txt";
+    fs::path list_file_name = "files.txt";
     ofstream list_out(list_file_name, ios::trunc);
     if (list_out.is_open())
     {

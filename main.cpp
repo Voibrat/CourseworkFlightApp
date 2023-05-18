@@ -270,7 +270,7 @@ public:
     }
 };
 // для бинарников
-vector<Flight> flights;
+vector <Flight> flights;
 vector <string> files;
 
 // нужно реализовать проверку на конец файла
@@ -322,6 +322,8 @@ void loadFlights()
     {
         filesystem::remove(file_path);
     }
+
+
     if (filesystem::is_empty("airports"))
     {
         filesystem::remove("airports");
@@ -334,8 +336,9 @@ void loadFlights()
 // Не работает trunc
 void saveFlights()
 {
-    filesystem::path folder_name = "airports";
+    files.clear();
 
+    filesystem::path folder_name = "airports";
 
     for (int i = 0; i < flights.size(); ++i)
     {
@@ -343,7 +346,9 @@ void saveFlights()
         filesystem::path file_name = (airport_name.string() + ".bin");
 
         ofstream fout(folder_name / file_name, ios::binary);
+        std::filesystem::path new_file = folder_name / file_name;
         files.push_back(folder_name / file_name);
+
         if (fout.is_open())
         {
             flights[i].write(fout);
@@ -351,13 +356,14 @@ void saveFlights()
         }
         else
         {
-            cerr << endl << "Невозможно открыть файл " << file_name;
+            cerr << endl << "Невозможно открыть файл " << file_name << endl;
         }
     }
 
 
+
     filesystem::path list_file_name = "files.txt";
-    ofstream list_out(list_file_name, ios::trunc); // открытие файла с очисткой содержимого
+    ofstream list_out(list_file_name, ios::trunc);
     if (list_out.is_open())
     {
         for (int i = 0; i < files.size(); ++i)
@@ -368,7 +374,7 @@ void saveFlights()
     }
     else
     {
-        cerr << "Невозможно открыть файл " << list_file_name << endl;
+        cerr << endl << "Невозможно открыть файл " << list_file_name << endl;
     }
 }
 
@@ -411,20 +417,6 @@ void saveFlightsTxt() {
 
         fout.close();
 
-        filesystem::path list_file_name = "files.txt";
-        ofstream list_out(list_file_name);
-        if (list_out.is_open())
-        {
-            for (int i = 0; i < files.size(); ++i)
-            {
-                list_out << files[i] << endl;
-            }
-            list_out.close();
-        }
-        else
-        {
-            cout << "Невозможно открыть файл " << list_file_name << endl;
-        }
     }
 }
 
@@ -916,6 +908,4 @@ int main()
 
         cout << endl;
     }
-
-    return 0;
 }

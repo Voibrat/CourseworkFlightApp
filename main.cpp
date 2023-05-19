@@ -6,14 +6,12 @@
 #include <filesystem>
 #include <locale.h>
 
-using namespace std;
-
 namespace fs = std::filesystem;
 
 class Flight
 {
 private:
-    string airport_name, flight_name, flight_number, departure_time;
+    std::string airport_name, flight_name, flight_number, departure_time;
     int distance, chairs_amount;
     double ticket_price;
 
@@ -31,22 +29,22 @@ public:
     }
 
     // Сеттеры
-    void setAirportName(string name)
+    void setAirportName(std::string name)
     {
         airport_name = name;
     }
 
-    void setFlightName(string name)
+    void setFlightName(std::string name)
     {
         flight_name = name;
     }
 
-    void setFlightNumber(string number)
+    void setFlightNumber(std::string number)
     {
         flight_number = number;
     }
 
-    void setDepartureTime(string time)
+    void setDepartureTime(std::string time)
     {
         departure_time = time;
     }
@@ -67,22 +65,22 @@ public:
     }
 
     // Геттеры
-    string getAirportName()
+    std::string getAirportName()
     {
         return airport_name;
     }
 
-    string getFlightName()
+    std::string getFlightName()
     {
         return flight_name;
     }
 
-    string getFlightNumber()
+    std::string getFlightNumber()
     {
         return flight_number;
     }
 
-    string getDepartureTime()
+    std::string getDepartureTime()
     {
         return departure_time;
     }
@@ -121,51 +119,51 @@ public:
     */
     void read()
     {
-        cout << "Введите название аэропорта: ";
-        cin >> airport_name;
-        cout << "Введите наименование рейса: ";
-        cin >> flight_name;
-        cout << "Введите номер рейса: ";
-        cin >> flight_number;
-        cout << "Введите время вылета: ";
-        cin >> departure_time;
+        std::cout << "Введите название аэропорта: ";
+        std::cin >> airport_name;
+        std::cout << "Введите наименование рейса: ";
+        std::cin >> flight_name;
+        std::cout << "Введите номер рейса: ";
+        std::cin >> flight_number;
+        std::cout << "Введите время вылета: ";
+        std::cin >> departure_time;
 
         // Проверка на правильный ввод chairs_amount
         while (true) {
-            cout << "Введите количество кресел: ";
-            if (cin >> chairs_amount) {
+            std::cout << "Введите количество кресел: ";
+            if (std::cin >> chairs_amount) {
                 break;
             }
-            cout << "Некорректный ввод, повторите попытку.\n";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            std::cout << "Некорректный ввод, повторите попытку.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
 
         // Проверка на правильный ввод distance
         while (true) {
-            cout << "Введите дистанцию: ";
-            if (cin >> distance) {
+            std::cout << "Введите дистанцию: ";
+            if (std::cin >> distance) {
                 break;
             }
-            cout << "Некорректный ввод, повторите попытку.\n";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            std::cout << "Некорректный ввод, повторите попытку.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
 
         // Проверка на правильный ввод ticket_price
         while (true) {
-            cout << "Введите цену билета: ";
-            if (cin >> ticket_price) {
+            std::cout << "Введите цену билета: ";
+            if (std::cin >> ticket_price) {
                 break;
             }
-            cout << "Некорректный ввод, повторите попытку.\n";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            std::cout << "Некорректный ввод, повторите попытку.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
 
     //запись для бинарников
-    void write(ofstream& fout)
+    void write(std::ofstream& fout)
     {
         int len = airport_name.length();
         fout.write((char*)&len, sizeof(int));
@@ -189,7 +187,7 @@ public:
     }
 
     //чтение для бинарников
-    void read(ifstream& fin)
+    void read(std::ifstream& fin)
     {
         int len;
         char* value;
@@ -224,35 +222,35 @@ public:
     }
 
     //функции для записи и чтения в обычном формате
-    void write_text(ofstream& fout) {
-        fout << airport_name << endl;
-        fout << flight_name << endl;
-        fout << flight_number << endl;
-        fout << departure_time << endl;
-        fout << chairs_amount << endl;
-        fout << distance << endl;
-        fout << ticket_price << endl;
+    void write_text(std::ofstream& fout) {
+        fout << airport_name << std::endl;
+        fout << flight_name << std::endl;
+        fout << flight_number << std::endl;
+        fout << departure_time << std::endl;
+        fout << chairs_amount << std::endl;
+        fout << distance << std::endl;
+        fout << ticket_price << std::endl;
     }
 
-    void read_text(ifstream& fin) {
-        getline(fin, airport_name);
+    void read_text(std::ifstream& fin) {
+        std::getline(fin, airport_name);
         if (airport_name.empty()) {
             return;
         }
-        getline(fin, flight_name);
-        getline(fin, flight_number);
-        getline(fin, departure_time);
+        std::getline(fin, flight_name);
+        std::getline(fin, flight_number);
+        std::getline(fin, departure_time);
 
         if (!(fin >> chairs_amount)) {
-            cout << "Часть введенных данных некорректна, проверьте данные в файле" << endl;
+            std::cerr << "Часть введенных данных некорректна, проверьте данные в файле" << std::endl;
             return;
         }
         if (!(fin >> distance)) {
-            cout << "Часть введенных данных некорректна, проверьте данные в файле" << endl;
+            std::cerr << "Часть введенных данных некорректна, проверьте данные в файле" << std::endl;
             return;
         }
         if (!(fin >> ticket_price)) {
-            cout << "Часть введенных данных некорректна, проверьте данные в файле" << endl;
+            std::cerr << "Часть введенных данных некорректна, проверьте данные в файле" << std::endl;
             return;
         }
 
@@ -262,19 +260,19 @@ public:
 
     void display()
     {
-        cout << "Название Аэропорта: " << airport_name << endl;
-        cout << "  Наименование рейса: " << flight_name << endl;
-        cout << "  Номер рейса: " << flight_number << endl;
-        cout << "  Время вылета: " << departure_time << endl;
-        cout << "  Количество кресел: " << chairs_amount << endl;
-        cout << "  Расстояние: " << distance << " км" << endl;
-        cout << "  Цена билета: " << ticket_price << " $" << endl;
-        cout << endl;
+        std::cout << "Название Аэропорта: " << airport_name << std::endl;
+        std::cout << "  Наименование рейса: " << flight_name << std::endl;
+        std::cout << "  Номер рейса: " << flight_number << std::endl;
+        std::cout << "  Время вылета: " << departure_time << std::endl;
+        std::cout << "  Количество кресел: " << chairs_amount << std::endl;
+        std::cout << "  Расстояние: " << distance << " км" << std::endl;
+        std::cout << "  Цена билета: " << ticket_price << " $" << std::endl;
+        std::cout << std::endl;
     }
 };
 // для бинарников
-vector <Flight> flights;
-vector <string> files;
+std::vector <Flight> flights;
+std::vector <std::string> files;
 
 // нужно реализовать проверку на конец файла
 void loadFlights()
@@ -283,15 +281,15 @@ void loadFlights()
     flights.clear();
 
     fs::path list_file_name = "files.txt";
-    ifstream list_in(list_file_name);
+    std::ifstream list_in(list_file_name);
 
     if (!list_in.is_open())
     {
-        cerr << endl << "Невозможно открыть файл " << list_file_name;
+        std::cerr << std::endl << "Невозможно открыть файл " << list_file_name;
         return;
     }
 
-    string file_path;
+    std::string file_path;
     while (getline(list_in, file_path))
     {
         files.push_back(file_path);
@@ -300,10 +298,10 @@ void loadFlights()
 
     for (int i = 0; i < files.size(); ++i)
     {
-        ifstream fin(files[i], ios::binary);
+        std::ifstream fin(files[i], std::ios::binary);
         if (!fin.is_open())
         {
-            cerr << endl << "Невозможно открыть файл " << files[i];
+            std::cerr << std::endl << "Невозможно открыть файл " << files[i];
             continue;
         }
 
@@ -342,12 +340,21 @@ void saveFlights()
 
     fs::path folder_name = "airports";
 
+    if (!fs::exists(folder_name)) {
+        if (fs::create_directory(folder_name)) {
+            std::cout << "Директория успешно создана" << std::endl;
+        }
+        else {
+            std::cout << "Ошибка создания директории" << std::endl;
+        }
+    }
+
     for (int i = 0; i < flights.size(); ++i)
     {
         fs::path airport_name = flights[i].getAirportName();
         fs::path file_name = (airport_name.string() + ".bin");
 
-        ofstream fout(folder_name / file_name, ios::binary);
+        std::ofstream fout(folder_name / file_name, std::ios::binary);
 
         fs::path new_file = folder_name / file_name;
         files.push_back((new_file).string());
@@ -360,25 +367,25 @@ void saveFlights()
         }
         else
         {
-            cerr << endl << "Невозможно открыть файл " << file_name << endl;
+            std::cerr << std::endl << "Невозможно открыть файл " << file_name << std::endl;
         }
     }
 
 
 
     fs::path list_file_name = "files.txt";
-    ofstream list_out(list_file_name, ios::trunc);
+    std::ofstream list_out(list_file_name, std::ios::trunc);
     if (list_out.is_open())
     {
         for (int i = 0; i < files.size(); ++i)
         {
-            list_out << files[i] << endl;
+            list_out << files[i] << std::endl;
         }
         list_out.close();
     }
     else
     {
-        cerr << endl << "Невозможно открыть файл " << list_file_name << endl;
+        std::cerr << std::endl << "Невозможно открыть файл " << list_file_name << std::endl;
     }
 }
 
@@ -387,7 +394,7 @@ void saveFlights()
 // нужно реализовать проверку на конец файла
 // для тхт
 void loadFlightsTxt() {
-    ifstream fin("flights.txt", ios::in);
+    std::ifstream fin("flights.txt", std::ios::in);
 
     if (fin.is_open())
     {
@@ -406,7 +413,7 @@ void loadFlightsTxt() {
 }
 
 void saveFlightsTxt() {
-    ofstream fout("flights.txt", ios::trunc);
+    std::ofstream fout("flights.txt", std::ios::trunc);
 
     if (fout.is_open())
     {
@@ -438,26 +445,26 @@ void displayFlights()
 {
     for (int i = 0; i < flights.size(); i++)
     {
-        cout << i << ".";
+        std::cout << i << ".";
         flights[i].display();
     }
 }
 
 void searchFlights()
 {
-    string flight_name;
-    string departure_time;
+    std::string flight_name;
+    std::string departure_time;
     double ticket_price;
 
-    cout << "Введите номер рейса (или введите 'any' для отображения всех): ";
-    cin >> flight_name;
-    cout << "Введите время вылета (или введите 'any' для отображения любого): ";
-    cin >> departure_time;
-    cout << "Введите стоимость билета (или введите '-1' для любой цены): ";
-    if (!(cin >> ticket_price)) {
-        cout << "Ошибка ввода." << endl;
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    std::cout << "Введите номер рейса (или введите 'any' для отображения всех): ";
+    std::cin >> flight_name;
+    std::cout << "Введите время вылета (или введите 'any' для отображения любого): ";
+    std::cin >> departure_time;
+    std::cout << "Введите стоимость билета (или введите '-1' для любой цены): ";
+    if (!(std::cin >> ticket_price)) {
+        std::cout << "Ошибка ввода." << std::endl;
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         return;
     }
 
@@ -467,7 +474,7 @@ void searchFlights()
             if (departure_time == "any" || departure_time == "Any" || departure_time == "ANY" ||
                 flights[i].getDepartureTime() == departure_time) {
                 if (ticket_price == -1 || flights[i].getTicketPrice() == ticket_price) {
-                    cout << "  ";
+                    std::cout << "  ";
                     flights[i].display();
                 }
             }
@@ -484,19 +491,19 @@ void searchFlights()
 void editTimeFlight()
 {
     setlocale(LC_ALL, "Russian");
-    string number;
+    std::string number;
     bool flag = false;
 
     displayFlights();
 
-    cout << "Введите номер рейса рейса чтобы изменить время вылета: ";
-    cin >> number;
+    std::cout << "Введите номер рейса рейса чтобы изменить время вылета: ";
+    std::cin >> number;
 
     for (int i = 0; i < flights.size(); i++) {
         if (number == flights[i].getFlightNumber()) {
-            string Time = "";
-            cout << "Введите новое время вылета: ";
-            cin >> Time;
+            std::string Time = "";
+            std::cout << "Введите новое время вылета: ";
+            std::cin >> Time;
             flights[i].setDepartureTime(Time);
             saveFlights();
             saveFlightsTxt();
@@ -505,20 +512,20 @@ void editTimeFlight()
         }
     }
     if (flag != true) {
-        cout << "Неверный номер рейса." << endl;
+        std::cout << "Неверный номер рейса." << std::endl;
     }
 }
 
 // переписать для работы с векторами
 void editPriceFlight()
 {
-    string name;
+    std::string name;
     bool flag = false;
 
     displayFlights();
 
-    cout << "Введите наименование рейса чтобы изменить его стоимость: ";
-    cin >> name;
+    std::cout << "Введите наименование рейса чтобы изменить его стоимость: ";
+    std::cin >> name;
 
 
     for (int i = 0; i < flights.size(); i++)
@@ -526,31 +533,31 @@ void editPriceFlight()
         if (name == flights[i].getFlightName())
         {
             double price;
-            cout << "Введите новую стоимость билета: ";
-            cin >> price;
+            std::cout << "Введите новую стоимость билета: ";
+            std::cin >> price;
             flights[i].setTicketPrice(price);
             saveFlights();
             saveFlightsTxt();
         }
     }
     if (flag != true) {
-        cout << "Неверный номер рейса." << endl;
+        std::cout << "Неверный номер рейса." << std::endl;
     }
 }
 
 void modificationFlight()
 {
-    ifstream fin("modifications.txt");
+    std::ifstream fin("modifications.txt");
     if (!fin.is_open())
     {
-        cout << "Ошибка открытия файла modifications.txt" << endl;
+        std::cout << "Ошибка открытия файла modifications.txt" << std::endl;
         return;
     }
 
-    string name, number;
+    std::string name, number;
     double price;
-    cout << "Измененные рейсы: " << endl;
-    cout << endl;
+    std::cout << "Измененные рейсы: " << std::endl;
+    std::cout << std::endl;
     while (getline(fin, name) and getline(fin, number) and fin >> price)
     {
         fin.ignore();
@@ -562,7 +569,7 @@ void modificationFlight()
             {
                 flights[i].setTicketPrice(price);
                 found = true;
-                cout << i << ".";
+                std::cout << i << ".";
                 flights[i].display();
 
                 break;
@@ -570,27 +577,27 @@ void modificationFlight()
         }
         if (!found)
         {
-            cout << "Аэропорт " << name << " и/или рейс " << number << " не были найдены." << endl;
+            std::cout << "Аэропорт " << name << " и/или рейс " << number << " не были найдены." << std::endl;
         }
     }
     fin.close();
 
-    ofstream fout("modifications.txt");
+    std::ofstream fout("modifications.txt");
     fout.write("", 0);
     fout.close();
 
     saveFlightsTxt();
     saveFlights();
-    cout << "Модификация окончена" << endl;
+    std::cout << "Модификация окончена" << std::endl;
 }
 
 void deleteFlight()
 {
-    cout << "  " << endl;
+    std::cout << "  " << std::endl;
     displayFlights();
     int index;
-    cout << "Введите индекс рейса чтобы удалить его: ";
-    cin >> index;
+    std::cout << "Введите индекс рейса чтобы удалить его: ";
+    std::cin >> index;
 
     if (index >= 0 && index < flights.size())
     {
@@ -600,15 +607,15 @@ void deleteFlight()
     }
     else
     {
-        cout << "Неправильный индекс." << endl;
+        std::cout << "Неправильный индекс." << std::endl;
     }
 }
 
 void findClosestAndFarthest()
 {
-    string airport_name;
-    cout << "Введите название аэропорта (или введите 'all' чтобы показать все): ";
-    cin >> airport_name;
+    std::string airport_name;
+    std::cout << "Введите название аэропорта (или введите 'all' чтобы показать все): ";
+    std::cin >> airport_name;
 
     if (airport_name == "all" or airport_name == "All" or airport_name == "ALL")
     {
@@ -630,11 +637,11 @@ void findClosestAndFarthest()
             }
         }
 
-        cout << "Самый короткий перелет: " << endl;
-        cout << "  ";
+        std::cout << "Самый короткий перелет: " << std::endl;
+        std::cout << "  ";
         flights[min_index].display();
-        cout << "Самый длинный перелет: " << endl;
-        cout << "  ";
+        std::cout << "Самый длинный перелет: " << std::endl;
+        std::cout << "  ";
         flights[max_index].display();
     }
     else
@@ -660,20 +667,20 @@ void findClosestAndFarthest()
             }
         }
 
-        cout << "Самый короткий перелет: " << endl;
-        cout << "  ";
+        std::cout << "Самый короткий перелет: " << std::endl;
+        std::cout << "  ";
         flights[min_index].display();
-        cout << "Самый длинный перелет: " << endl;
-        cout << "  ";
+        std::cout << "Самый длинный перелет: " << std::endl;
+        std::cout << "  ";
         flights[max_index].display();
     }
 }
 
 void findCheapestAndMostExpensive()
 {
-    string flight_name;
-    cout << "Введите наименование рейса (или введите 'all' чтобы показать все): ";
-    cin >> flight_name;
+    std::string flight_name;
+    std::cout << "Введите наименование рейса (или введите 'all' чтобы показать все): ";
+    std::cin >> flight_name;
 
     if (flight_name == "all" or flight_name == "All" or flight_name == "ALL")
     {
@@ -695,11 +702,11 @@ void findCheapestAndMostExpensive()
             }
         }
 
-        cout << "Самый дешевый авиабилет: " << endl;
-        cout << "  ";
+        std::cout << "Самый дешевый авиабилет: " << std::endl;
+        std::cout << "  ";
         flights[min_index].display();
-        cout << "Самый дорогой авиабилет: " << endl;
-        cout << "  ";
+        std::cout << "Самый дорогой авиабилет: " << std::endl;
+        std::cout << "  ";
         flights[max_index].display();
     }
     else
@@ -725,11 +732,11 @@ void findCheapestAndMostExpensive()
             }
         }
 
-        cout << "Самый дешевый авиабилет: ";
-        cout << "  ";
+        std::cout << "Самый дешевый авиабилет: ";
+        std::cout << "  ";
         flights[min_index].display();
-        cout << "Самый дорогой авиабилет: ";
-        cout << "  ";
+        std::cout << "Самый дорогой авиабилет: ";
+        std::cout << "  ";
         flights[max_index].display();
     }
 }
@@ -753,12 +760,12 @@ int main()
 
     int choiceLoad = 0;
 
-    cout << "Выберите вариант чтения данных:" << endl;
-    cout << "1. Из txt файла" << endl;
-    cout << "2. Из bin файла" << endl;
-    cout << "Сделайте выбор: ";
-    cin >> choiceLoad;
-    cout << endl;
+    std::cout << "Выберите вариант чтения данных:" << std::endl;
+    std::cout << "1. Из txt файла" << std::endl;
+    std::cout << "2. Из bin файла" << std::endl;
+    std::cout << "Сделайте выбор: ";
+    std::cin >> choiceLoad;
+    std::cout << std::endl;
 
     if (choiceLoad == 1) {
         loadFlightsTxt();
@@ -776,7 +783,7 @@ int main()
         }
     }
     else {
-        cout << "Ошибка ввода, пожалуйста, попробуйте еще раз" << endl;
+        std::cout << "Ошибка ввода, пожалуйста, попробуйте еще раз" << std::endl;
         return 0;
     }
 
@@ -787,34 +794,34 @@ int main()
 
     while (true)
     {
-        cout << "===================================================" << endl;
-        cout << "____________FLIGHTS CONSOLE APPLICATION____________" << endl;
-        cout << "===================================================" << endl;
-        cout << "1. Добавить рейс" << endl;
-        cout << "2. Показать все рейсы" << endl;
-        cout << "3. Поиск рейсов" << endl;
-        cout << "4. Редактировать рейс" << endl;
-        cout << "5. Удалить рейс" << endl;
-        cout << "6. Найти самые короткий и длинный рейсы" << endl;
-        cout << "7. Найти самые дешевые и самые дорогие авиабилеты" << endl;
-        cout << "8. Модификация данных из файла" << endl;
-        cout << "9. Выход" << endl;
-        cout << "Сделайте выбор: ";
+        std::cout << "===================================================" << std::endl;
+        std::cout << "____________FLIGHTS CONSOLE APPLICATION____________" << std::endl;
+        std::cout << "===================================================" << std::endl;
+        std::cout << "1. Добавить рейс" << std::endl;
+        std::cout << "2. Показать все рейсы" << std::endl;
+        std::cout << "3. Поиск рейсов" << std::endl;
+        std::cout << "4. Редактировать рейс" << std::endl;
+        std::cout << "5. Удалить рейс" << std::endl;
+        std::cout << "6. Найти самые короткий и длинный рейсы" << std::endl;
+        std::cout << "7. Найти самые дешевые и самые дорогие авиабилеты" << std::endl;
+        std::cout << "8. Модификация данных из файла" << std::endl;
+        std::cout << "9. Выход" << std::endl;
+        std::cout << "Сделайте выбор: ";
 
         int choice;
-        string modChoice, editChoice;
-        cin >> choice;
-        cout << endl;
+        std::string modChoice, editChoice;
+        std::cin >> choice;
+        std::cout << std::endl;
         switch (choice)
         {
             case 1:
                 while (true) {
-                    cout << "Вы уверены что хотите продолжить?" << endl;
-                    cout << "1. Продолжить" << endl;
-                    cout << "2. Вернуться" << endl;
-                    cout << "Сделайте выбор: ";
-                    cin >> modChoice;
-                    cout << "  " << endl;
+                    std::cout << "Вы уверены что хотите продолжить?" << std::endl;
+                    std::cout << "1. Продолжить" << std::endl;
+                    std::cout << "2. Вернуться" << std::endl;
+                    std::cout << "Сделайте выбор: ";
+                    std::cin >> modChoice;
+                    std::cout << "  " << std::endl;
                     if (modChoice == "1") {
                         addFlight();
                         break;
@@ -823,7 +830,7 @@ int main()
                     {
                         break;
                     }
-                    else { cout << "Ошибка ввода" << endl; }
+                    else {std::cout << "Ошибка ввода" << std::endl;}
                 }
                 break;
             case 2:
@@ -835,11 +842,11 @@ int main()
             case 4:
                 while (true)
                 {
-                    cout << "1. Изменить время вылета" << endl;
-                    cout << "2. Изменить цену авиабилета" << endl;
-                    cout << "3. Вернуться в меню" << endl;
-                    cout << "Сделайте выбор: ";
-                    cin >> editChoice;
+                    std::cout << "1. Изменить время вылета" << std::endl;
+                    std::cout << "2. Изменить цену авиабилета" << std::endl;
+                    std::cout << "3. Вернуться в меню" << std::endl;
+                    std::cout << "Сделайте выбор: ";
+                    std::cin >> editChoice;
                     if (editChoice == "1")
                     {
                         editTimeFlight();
@@ -854,17 +861,17 @@ int main()
                     }
                     else
                     {
-                        cout << "Ошибка ввода." << endl;
+                        std::cout << "Ошибка ввода." << std::endl;
                     }
                 }
                 break;
             case 5:
                 while (true) {
-                    cout << "Вы уверены что хотите продолжить?" << endl;
-                    cout << "1. Продолжить" << endl;
-                    cout << "2. Вернуться" << endl;
-                    cout << "Сделайте выбор: ";
-                    cin >> modChoice;
+                    std::cout << "Вы уверены что хотите продолжить?" << std::endl;
+                    std::cout << "1. Продолжить" << std::endl;
+                    std::cout << "2. Вернуться" << std::endl;
+                    std::cout << "Сделайте выбор: ";
+                    std::cin >> modChoice;
                     if (modChoice == "1") {
                         deleteFlight();
                         break;
@@ -873,7 +880,7 @@ int main()
                     {
                         break;
                     }
-                    else { cout << "Ошибка ввода" << endl; }
+                    else { std::cout << "Ошибка ввода" << std::endl; }
                 }
                 break;
 
@@ -885,11 +892,11 @@ int main()
                 break;
             case 8:
                 while (true) {
-                    cout << "Вы уверены что хотите модифицировать данные из внешнего файла?" << endl;
-                    cout << "1. Продолжить" << endl;
-                    cout << "2. Вернуться" << endl;
-                    cout << "Сделайте выбор: ";
-                    cin >> modChoice;
+                    std::cout << "Вы уверены что хотите модифицировать данные из внешнего файла?" << std::endl;
+                    std::cout << "1. Продолжить" << std::endl;
+                    std::cout << "2. Вернуться" << std::endl;
+                    std::cout << "Сделайте выбор: ";
+                    std::cin >> modChoice;
                     if (modChoice == "1") {
                         modificationFlight();
                         break;
@@ -898,7 +905,7 @@ int main()
                     {
                         break;
                     }
-                    else { cout << "Ошибка ввода" << endl; }
+                    else { std::cout << "Ошибка ввода" << std::endl; }
                 }
                 break;
             case 9:
@@ -906,10 +913,10 @@ int main()
                 saveFlightsTxt();
                 exit(0);
             default:
-                cout << "Ошибка ввода" << endl;
+                std::cout << "Ошибка ввода" << std::endl;
                 break;
         }
 
-        cout << endl;
+        std::cout << std::endl;
     }
 }

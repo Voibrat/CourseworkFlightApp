@@ -12,7 +12,7 @@
 #include <sstream>
 #include <set>
 #include <filesystem>
-#include <locale.h>
+#include <locale>
 #include <regex>
 #include <limits>
 #include <chrono>
@@ -195,6 +195,45 @@ void displayFlights()
     }
 }
 
+void displayFlightsTable()
+{
+    char sim = '=';
+
+    std::cout << "|" << string ( 111, '=') << "|" <<  std::endl;
+    std::cout << "|" << std::left << std::setw(2) << "id" << "|"
+              << std::left << std::setw(19) << "Название" << "|"
+              << std::left << std::setw(27) << "Наименование" << "|"
+              << std::left << std::setw(20) << "Номер" << "|"
+              << std::left << std::setw(20) << "Время" << "|"
+              << std::left << std::setw(24) << "Количество" << "|"
+              << std::left << std::setw(23) << "Дистанция" << " км" << "|"
+              << std::left << std::setw(22) << "Стоимость" << " $" << "|"
+              << std::endl;
+    std::cout << "|" << std::left << std::setw(2) << "  " << "|"
+              << std::left << std::setw(20) << "аэропорта" << "|"
+              << std::left << std::setw(20) << "рейса" << "|"
+              << std::left << std::setw(20) << "рейса" << "|"
+              << std::left << std::setw(21) << "вылета" << "|"
+              << std::left << std::setw(20) << "кресел" << "|"
+              << std::left << std::setw(20) << "полета" << " км" << "|"
+              << std::left << std::setw(19) << "билета" << " $" << "|"
+              << std::endl;
+    std::cout << "|" << string ( 111, '-') << "|" << std::endl;
+    for (int i = 0; i < flights.size(); i++)
+    {
+        flights[i].display(i);
+        std::cout << "|" << string ( 111, '-') << "|" << std::endl;
+    }
+    std::cout << "|" << string ( 111, '=') << "|" << std::endl;
+    /*
+    printf("%-40s %-40s %-25s %-25s %-40s %-25s %-25s\n", "| Название Аэропорта", "| Наименование рейса", "|Номер рейса", " | Время вылета", "| Количество кресел", "| Расстояние", "| Цена билета |");
+    cout << endl;
+    for (int i = 0; i < flights.size(); i++) {
+        printf("%-18s %-15s %-7s %-13s %-13d %-13d %-13f\n", flights[i].getAirportName().c_str(), flights[i].getFlightName().c_str(), flights[i].getFlightNumber().c_str(), flights[i].getDepartureTime().c_str(), flights[i].getChairsAmount(), flights[i].getDistance(), flights[i].getTicketPrice());
+    }
+     */
+}
+
 void searchFlights()
 {
     std::string flight_name;
@@ -220,7 +259,7 @@ void searchFlights()
                 flights[i].getDepartureTime() == departure_time) {
                 if (ticket_price == -1 || flights[i].getTicketPrice() == ticket_price) {
                     std::cout << "  ";
-                    flights[i].display();
+                    flights[i].display(i);
                 }
             }
         }
@@ -318,7 +357,7 @@ void modificationFlight()
                 flights[i].setTicketPrice(price);
                 found = true;
                 std::cout << i << ".";
-                flights[i].display();
+                flights[i].display(i);
                 counter++;
                 break;
             }
@@ -389,10 +428,10 @@ void findClosestAndFarthest()
 
         std::cout << "Самый короткий перелет: " << std::endl;
         std::cout << "  ";
-        flights[min_index].display();
+        flights[min_index].display(min_index);
         std::cout << "Самый длинный перелет: " << std::endl;
         std::cout << "  ";
-        flights[max_index].display();
+        flights[max_index].display(max_index);
     }
     else
     {
@@ -419,10 +458,10 @@ void findClosestAndFarthest()
 
         std::cout << "Самый короткий перелет: " << std::endl;
         std::cout << "  ";
-        flights[min_index].display();
+        flights[min_index].display(min_index);
         std::cout << "Самый длинный перелет: " << std::endl;
         std::cout << "  ";
-        flights[max_index].display();
+        flights[max_index].display(max_index);
     }
 }
 
@@ -454,10 +493,10 @@ void findCheapestAndMostExpensive()
 
         std::cout << "Самый дешевый авиабилет: " << std::endl;
         std::cout << "  ";
-        flights[min_index].display();
+        flights[min_index].display(min_index);
         std::cout << "Самый дорогой авиабилет: " << std::endl;
         std::cout << "  ";
-        flights[max_index].display();
+        flights[max_index].display(max_index);
     }
     else
     {
@@ -484,10 +523,10 @@ void findCheapestAndMostExpensive()
 
         std::cout << "Самый дешевый авиабилет: ";
         std::cout << "  ";
-        flights[min_index].display();
+        flights[min_index].display(min_index);
         std::cout << "Самый дорогой авиабилет: ";
         std::cout << "  ";
-        flights[max_index].display();
+        flights[max_index].display(max_index);
     }
 }
 void vectorSort() {

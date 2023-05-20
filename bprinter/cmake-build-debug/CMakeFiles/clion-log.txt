@@ -1,0 +1,1 @@
+CMakeLists.txt not found in /Users/voibrat/Yandex.Disk.localized/#Code/CourseworkFlightApp/bprinter Select CMakeLists.txt

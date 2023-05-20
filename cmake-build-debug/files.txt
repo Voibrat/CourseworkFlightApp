@@ -1,0 +1,5 @@
+airports/HGH.bin
+airports/GHH.bin
+airports/HGK.bin
+airports/SVO.bin
+airports/SVO.bin

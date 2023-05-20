@@ -6,10 +6,9 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
 					"minimumCMakeVersion" : 
 					{
-						"string" : "3.25"
+						"string" : "3.0"
 					},
 					"projectIndex" : 0,
 					"source" : ".",
@@ -39,7 +38,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "CourseworkFlightApp::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-CourseworkFlightApp-Debug-26c2cc2215b89c1114dd.json",
+					"jsonFile" : "target-CourseworkFlightApp-Debug-f30b16b46923d617ed34.json",
 					"name" : "CourseworkFlightApp",
 					"projectIndex" : 0
 				}
@@ -55,6 +54,6 @@
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 4
+		"minor" : 2
 	}
 }

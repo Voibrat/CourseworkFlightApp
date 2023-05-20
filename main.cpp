@@ -16,7 +16,6 @@
 
 int main()
 {
-    setlocale(LC_ALL, "Russian");
 
     int choiceLoad = 0;
 
@@ -77,6 +76,7 @@ int main()
             }
             break;
         case 2:
+            vectorSort();
             displayFlights();
             break;
         case 3:

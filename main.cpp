@@ -7,7 +7,7 @@
 #include <sstream>
 #include <set>
 #include <filesystem>
-#include <locale.h>
+#include <locale>
 #include <chrono>
 #include <thread>
 #include <cstdlib>
@@ -18,7 +18,7 @@ int main()
 {
 
     int choiceLoad = 0;
-
+    std::string tableChoice = "1";
     std::cout << "Выберите вариант чтения данных:" << std::endl;
     std::cout << "1. Из txt файла" << std::endl;
     std::cout << "2. Из bin файла" << std::endl;
@@ -47,11 +47,12 @@ int main()
         std::cout << "6. Найти самые короткий и длинный рейсы" << std::endl;
         std::cout << "7. Найти самые дешевые и самые дорогие авиабилеты" << std::endl;
         std::cout << "8. Модификация данных из файла" << std::endl;
-        std::cout << "9. Выход" << std::endl;
+        std::cout << "9. Изменение отображения данный о рейсах" << std::endl;
+        std::cout << "10. Выход" << std::endl;
         std::cout << "Сделайте выбор: ";
 
         int choice;
-        std::string modChoice, editChoice;
+        std::string modChoice, editChoice, tableChoiceEdit;
         std::cin >> choice;
         std::cout << std::endl;
         switch (choice)
@@ -77,7 +78,8 @@ int main()
             break;
         case 2:
             vectorSort();
-            displayFlights();
+            if (tableChoice == "1") {displayFlights();}
+            else if (tableChoice == "2") {displayFlightsTable();}
             break;
         case 3:
             searchFlights();
@@ -92,11 +94,13 @@ int main()
                 std::cin >> editChoice;
                 if (editChoice == "1")
                 {
-                    editTimeFlight();
+                    if (tableChoice == "1") {editTimeFlight("1");}
+                    else if (tableChoice == "2") {editTimeFlight("2");}
                     break;
                 }
                 else if (editChoice == "2") {
-                    editPriceFlight();
+                    if (tableChoice == "1") {editPriceFlight("1");}
+                    else if (tableChoice == "2") {editPriceFlight("2");}
                     break;
                 }
                 else if (editChoice == "3") {
@@ -116,7 +120,8 @@ int main()
                 std::cout << "Сделайте выбор: ";
                 std::cin >> modChoice;
                 if (modChoice == "1") {
-                    deleteFlight();
+                    if (tableChoice == "1") {deleteFlight("1");}
+                    else if (tableChoice == "2") {deleteFlight("2");}
                     break;
                 }
                 else if (modChoice == "2")
@@ -140,6 +145,7 @@ int main()
                 std::cout << "2. Вернуться" << std::endl;
                 std::cout << "Сделайте выбор: ";
                 std::cin >> modChoice;
+
                 if (modChoice == "1") {
                     modificationFlight();
                     break;
@@ -152,9 +158,33 @@ int main()
             }
             break;
         case 9:
+            while (true) {
+                std::cout << "Вы уверены что хотите изменить способ вывода?" << std::endl;
+                std::cout << "В данный момент выбран вариант: ";
+                if (tableChoice == "1") {std::cout << "Лаконичный" << std::endl;}
+                else if (tableChoice == "2") {std::cout << "Табличный" << std::endl;}
+
+                std::cout << "1. Продолжить" << std::endl;
+                std::cout << "2. Вернуться" << std::endl;
+                std::cout << "Сделайте выбор: ";
+                std::cin >> tableChoiceEdit;
+
+                if (tableChoiceEdit == "1") {
+                    if (tableChoice == "1") {tableChoice = "2";}
+                    else if (tableChoice == "2") {tableChoice = "1";}
+                }
+                else if (tableChoiceEdit == "2")
+                {
+                    tableChoiceEdit = "0";
+                    break;
+                }
+                else { std::cerr << "Ошибка ввода" << std::endl; }
+            }
+            break;
+        case 10:
             saveFlights();
-            saveFlightsTxt();
-            exit(0);
+                saveFlightsTxt();
+                exit(0);
         default:
             std::cerr << "Ошибка ввода" << std::endl;
             break;

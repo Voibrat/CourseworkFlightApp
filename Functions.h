@@ -272,13 +272,15 @@ void searchFlights()
 // Выбор варианта модификации определяется из диалога.
 // upd: функция цундерит - меняет правильно, но говорит что неправильный номер
 // upd2: починил
-void editTimeFlight()
+void editTimeFlight(std::string choice)
 {
+
     setlocale(LC_ALL, "Russian");
     std::string number;
     bool flag = false;
 
-    displayFlights();
+    if (choice == "1") {displayFlights();}
+    else if (choice == "2") {displayFlightsTable();}
 
     std::cout << "Введите номер рейса рейса чтобы изменить время вылета: ";
     std::cin >> number;
@@ -301,12 +303,12 @@ void editTimeFlight()
 }
 
 // переписать для работы с векторами
-void editPriceFlight()
+void editPriceFlight(std::string choice)
 {
     std::string name;
     bool flag = false;
-
-    displayFlights();
+    if (choice == "1") {displayFlights();}
+    else if (choice == "2") {displayFlightsTable();}
 
     std::cout << "Введите наименование рейса чтобы изменить его стоимость: ";
     std::cin >> name;
@@ -380,10 +382,11 @@ void modificationFlight()
     std::cout << "Модификация успешно завершена!\nИзменено " << counter << " рейсов" << std::endl;
 }
 
-void deleteFlight()
+void deleteFlight(std::string choice)
 {
     std::cout << "  " << std::endl;
-    displayFlights();
+    if (choice == "1") {displayFlights();}
+    else if (choice == "2") {displayFlightsTable();}
     int index;
     std::cout << "Введите индекс рейса чтобы удалить его: ";
     std::cin >> index;

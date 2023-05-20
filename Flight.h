@@ -5,7 +5,7 @@
 #ifndef COURSEWORKFLIGHTAPP_FLIGHT_H
 #define COURSEWORKFLIGHTAPP_FLIGHT_H
 #endif //COURSEWORKFLIGHTAPP_FLIGHT_H
-
+#include <iomanip>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -18,6 +18,7 @@
 #include <chrono>
 #include <thread>
 #include <cstdlib>
+
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -114,23 +115,6 @@ public:
         return ticket_price;
     }
 
-    // Функции
-    /*
-    int getValue(string query)
-    {
-        int value;
-        cout << query.c_str();
-        while(!(cin >> value))
-        {
-            if(cin.eof())
-            { throw "eof"; }
-            cin.clear();
-            cin.ignore(1000,'\n');
-            cout << "Try again: ";
-        }
-        return value;
-    }
-    */
     void read()
     {
         std::string input;
@@ -306,8 +290,6 @@ public:
         fin.ignore(); // игнор ньюлайнов
     }
 
-
-
     void display()
     {
         std::cout << "Название Аэропорта: " << airport_name << std::endl;
@@ -318,5 +300,37 @@ public:
         std::cout << "  Расстояние: " << distance << " км" << std::endl;
         std::cout << "  Цена билета: " << ticket_price << " $" << std::endl;
         std::cout << std::endl;
+    }
+
+    void display(int i)
+    {
+        /*
+        std::cout << "Название Аэропорта: " << airport_name << std::endl;
+        std::cout << "  Наименование рейса: " << flight_name << std::endl;
+        std::cout << "  Номер рейса: " << flight_number << std::endl;
+        std::cout << "  Время вылета: " << departure_time << std::endl;
+        std::cout << "  Количество кресел: " << chairs_amount << std::endl;
+        std::cout << "  Расстояние: " << distance << " км" << std::endl;
+        std::cout << "  Цена билета: " << ticket_price << " $" << std::endl;
+        std::cout << std::endl;
+        */
+        std::cout << "|" << " " << i ;
+        std::cout << "|"  << std::left << std::setw(11) << airport_name << "|"
+                  << std::left << std::setw(15) << flight_name << "|"
+                  << std::left << std::setw(15) << flight_number << "|"
+                  << std::left << std::setw(15) << departure_time << "|"
+                  << std::left << std::setw(14) << chairs_amount << "|"
+                  << std::left << std::setw(16) << distance << "|"
+                  << std::left << std::setw(16) << std::put_money(ticket_price, true) << "|"
+                  << std::endl;
+
+        /*
+         std::cout << airport_name << "\t" << flight_name << "\t"
+         << flight_number << "\t"
+         << departure_time << "\t"<< chairs_amount << "\t"
+         << distance << " км" << "\t"
+         << ticket_price << " $" << std::endl;
+         std::cout << std::endl;
+         */
     }
 };

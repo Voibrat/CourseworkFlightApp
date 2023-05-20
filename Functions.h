@@ -1,6 +1,11 @@
 //
-// Created by Дмитрий Филиппов on 4.05.2023.
+// Created by Дмитрий Филиппов on 29.04.2023.
 //
+
+#ifndef COURSEWORKFLIGHTAPP_FUNCTIONS_H
+#define COURSEWORKFLIGHTAPP_FUNCTIONS_H
+#endif //COURSEWORKFLIGHTAPP_FUNCTIONS_H
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -14,13 +19,7 @@
 #include <thread>
 #include <cstdlib>
 
-using namespace std;
 namespace fs = std::filesystem;
-
-#ifndef COURSEWORKFLIGHTAPP_FUNCTIONS_H
-#define COURSEWORKFLIGHTAPP_FUNCTIONS_H
-
-#endif //COURSEWORKFLIGHTAPP_FUNCTIONS_H
 
 // для бинарников
 std::vector <Flight> flights;
@@ -491,14 +490,9 @@ void findCheapestAndMostExpensive()
         flights[max_index].display();
     }
 }
-void emptyChecker() {
-    for (int i = 0; i < flights.size(); i++)
-    {
-        if ((flights[i].getAirportName() != "") && (flights[i].getFlightName() != "") && (flights[i].getFlightNumber() != "")
-            && (flights[i].getDepartureTime() != "") && (flights[i].getDistance() != 0) && (flights[i].getTicketPrice() != 0.0))
-        {
-            //flights.pop_back();
-            flights.erase(flights.begin() + i);
-        }
-    }
+void vectorSort() {
+    // Сортировка вектора для вывода в порядке возрастания времени вылета
+    std::sort(flights.begin(), flights.end(), [](Flight a, Flight b) {
+        return a.getDepartureTime() < b.getDepartureTime();
+    });
 }

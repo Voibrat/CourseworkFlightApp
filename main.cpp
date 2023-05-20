@@ -1,3 +1,6 @@
+//
+// Created by Дмитрий Филиппов on 29.04.2023.
+//
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -5,16 +8,11 @@
 #include <set>
 #include <filesystem>
 #include <locale.h>
-#include <regex>
-#include <limits>
 #include <chrono>
 #include <thread>
 #include <cstdlib>
 #include "Flight.h"
 #include "Functions.h"
-
-using namespace std;
-namespace fs = std::filesystem;
 
 int main()
 {
@@ -28,33 +26,14 @@ int main()
     std::cout << "Сделайте выбор: ";
     std::cin >> choiceLoad;
 
-    if (choiceLoad == 1) {
-        loadFlightsTxt();
-        if (!flights.empty())
-        {
-            //flights.pop_back();
-        }
-    }
-    else if (choiceLoad == 2) {
-        loadFlights();
-        //удаляет последний элемент вектора классов, решает проблему пустых экземпляров класса FLight при чтении из файла
-        if (!flights.empty())
-        {
-            //flights.pop_back();
-        }
-    }
+    if (choiceLoad == 1) {loadFlightsTxt();}
+    else if (choiceLoad == 2) {loadFlights();}
     else {
         std::cerr << "Ошибка ввода, пожалуйста, попробуйте еще раз" << std::endl;
         return 0;
     }
 
-    //удаляет последний элемент вектора классов, частично решает проблему пустых экземпляров класса FLight при чтении из файла
-    //flights.pop_back();
-
-    //emptyChecker();
-    std::cout << "Подождите, идет загрузка данных..." << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-
+    vectorSort();
 
     while (true)
     {

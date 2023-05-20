@@ -320,8 +320,8 @@ public:
                   << std::left << std::setw(15) << flight_number << "|"
                   << std::left << std::setw(15) << departure_time << "|"
                   << std::left << std::setw(14) << chairs_amount << "|"
-                  << std::left << std::setw(16) << distance << "|"
-                  << std::left << std::setw(16) << std::put_money(ticket_price, true) << "|"
+                  << std::left << std::setw(17) << distance << "|"
+                  << std::left << std::setw(15) << std::put_money(ticket_price, true) << "|"
                   << std::endl;
 
         /*

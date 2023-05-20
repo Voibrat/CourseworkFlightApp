@@ -82,7 +82,8 @@ int main()
             else if (tableChoice == "2") {displayFlightsTable();}
             break;
         case 3:
-            searchFlights();
+            if (tableChoice == "1") {searchFlights("1");}
+            else if (tableChoice == "2") {searchFlights("2");}
             break;
         case 4:
             while (true)
@@ -147,7 +148,8 @@ int main()
                 std::cin >> modChoice;
 
                 if (modChoice == "1") {
-                    modificationFlight();
+                    if (tableChoice == "1") {modificationFlight("1");}
+                    else if (tableChoice == "2") {modificationFlight("2");}
                     break;
                 }
                 else if (modChoice == "2")

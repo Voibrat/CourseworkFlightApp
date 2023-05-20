@@ -234,7 +234,7 @@ void displayFlightsTable()
      */
 }
 
-void searchFlights()
+void searchFlights(std::string choice)
 {
     std::string flight_name;
     std::string departure_time;
@@ -259,7 +259,9 @@ void searchFlights()
                 flights[i].getDepartureTime() == departure_time) {
                 if (ticket_price == -1 || flights[i].getTicketPrice() == ticket_price) {
                     std::cout << "  ";
-                    flights[i].display(i);
+                    if (choice == "1") {flights[i].display();}
+                    else if (choice == "2") {flights[i].display(i);}
+
                 }
             }
         }
@@ -308,7 +310,10 @@ void editPriceFlight(std::string choice)
     std::string name;
     bool flag = false;
     if (choice == "1") {displayFlights();}
-    else if (choice == "2") {displayFlightsTable();}
+    else if (choice == "2") {
+
+        displayFlightsTable();
+    }
 
     std::cout << "Введите наименование рейса чтобы изменить его стоимость: ";
     std::cin >> name;
@@ -331,7 +336,7 @@ void editPriceFlight(std::string choice)
     }
 }
 
-void modificationFlight()
+void modificationFlight(std::string choice)
 {
     std::ifstream fin("modifications.txt");
     if (!fin.is_open())
@@ -339,14 +344,38 @@ void modificationFlight()
         std::cerr << "Ошибка открытия файла modifications.txt" << std::endl;
         return;
     }
-
+    if (fin.peek() == EOF) {cout << "Файл модификации пуст" << endl;}
     std::string name, number;
     double price;
     int counter = 0;
 
-    std::cout << "Измененные рейсы: " << std::endl;
-    std::cout << std::endl;
+    if (fin.peek() != EOF) {
+        std::cout << "Измененные рейсы: " << std::endl;
+        std::cout << std::endl;
+    }
 
+    if (choice == "2" && fin.peek() != EOF) {
+        std::cout << "|" << string(111, '=') << "|" << std::endl;
+        std::cout << "|" << std::left << std::setw(2) << "id" << "|"
+                  << std::left << std::setw(19) << "Название" << "|"
+                  << std::left << std::setw(27) << "Наименование" << "|"
+                  << std::left << std::setw(20) << "Номер" << "|"
+                  << std::left << std::setw(20) << "Время" << "|"
+                  << std::left << std::setw(24) << "Количество" << "|"
+                  << std::left << std::setw(23) << "Дистанция" << " км" << "|"
+                  << std::left << std::setw(22) << "Стоимость" << " $" << "|"
+                  << std::endl;
+        std::cout << "|" << std::left << std::setw(2) << "  " << "|"
+                  << std::left << std::setw(20) << "аэропорта" << "|"
+                  << std::left << std::setw(20) << "рейса" << "|"
+                  << std::left << std::setw(20) << "рейса" << "|"
+                  << std::left << std::setw(21) << "вылета" << "|"
+                  << std::left << std::setw(20) << "кресел" << "|"
+                  << std::left << std::setw(20) << "полета" << " км" << "|"
+                  << std::left << std::setw(19) << "билета" << " $" << "|"
+                  << std::endl;
+        std::cout << "|" << string(111, '-') << "|" << std::endl;
+    }
     while (getline(fin, name) && getline(fin, number) && fin >> price)
     {
         fin.ignore();
@@ -358,8 +387,19 @@ void modificationFlight()
             {
                 flights[i].setTicketPrice(price);
                 found = true;
-                std::cout << i << ".";
-                flights[i].display(i);
+                /*
+                if (choice == "1") {displayFlights();}
+                else if (choice == "2") {displayFlightsTable();}
+                */
+                if (choice == "1") {
+                    std::cout << i << ".";
+                    flights[i].display();
+                }
+                else if (choice == "2") {
+
+                    flights[i].display(i);
+                    std::cout << "|" << string ( 111, '-') << "|" << std::endl;
+                }
                 counter++;
                 break;
             }
@@ -369,7 +409,9 @@ void modificationFlight()
             std::cerr << "Аэропорт " << name << " и/или рейс " << number << " не были найдены" << std::endl;
         }
     }
-    if (fin.peek() == EOF) {cout << "Файл модификации пуст" << endl;}
+    if (choice == "2" && fin.peek() != EOF) {
+        std::cout << "|" << string ( 111, '=') << "|" << std::endl;
+    }
     fin.close();
 
     std::ofstream fout("modifications.txt");
@@ -403,6 +445,7 @@ void deleteFlight(std::string choice)
     }
 }
 
+// сделать разные варианты вывода через choice
 void findClosestAndFarthest()
 {
     std::string airport_name;
@@ -468,6 +511,7 @@ void findClosestAndFarthest()
     }
 }
 
+// сделать разные варианты вывода через choice
 void findCheapestAndMostExpensive()
 {
     std::string flight_name;

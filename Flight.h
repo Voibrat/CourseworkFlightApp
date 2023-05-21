@@ -12,7 +12,7 @@
 #include <sstream>
 #include <set>
 #include <filesystem>
-#include <locale.h>
+#include <locale>
 #include <regex>
 #include <limits>
 #include <chrono>

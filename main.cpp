@@ -2,12 +2,7 @@
 // Created by Дмитрий Филиппов on 29.04.2023.
 //
 #include <iostream>
-#include <fstream>
 #include <vector>
-#include <sstream>
-#include <set>
-#include <filesystem>
-#include <locale>
 #include <chrono>
 #include <thread>
 #include <cstdlib>

@@ -68,13 +68,7 @@ void loadFlights()
 
         fin.close();
     }
-    /*
-    // удаление файлов
-    for (auto& file_path : files)
-    {
-        fs::remove(file_path);
-    }
-    */
+
 }
 
 
@@ -199,7 +193,7 @@ void displayFlightsTable()
 {
     char sim = '=';
 
-    std::cout << "|" << string ( 111, '=') << "|" <<  std::endl;
+    std::cout << std::endl << "|" << string ( 111, '=') << "|" << std::endl;
     std::cout << "|" << std::left << std::setw(2) << "id" << "|"
               << std::left << std::setw(19) << "Название" << "|"
               << std::left << std::setw(27) << "Наименование" << "|"
@@ -224,7 +218,7 @@ void displayFlightsTable()
         flights[i].display(i);
         std::cout << "|" << string ( 111, '-') << "|" << std::endl;
     }
-    std::cout << "|" << string ( 111, '=') << "|" << std::endl;
+    std::cout << "|" << string ( 111, '=') << "|" << std::endl << std::endl;
     /*
     printf("%-40s %-40s %-25s %-25s %-40s %-25s %-25s\n", "| Название Аэропорта", "| Наименование рейса", "|Номер рейса", " | Время вылета", "| Количество кресел", "| Расстояние", "| Цена билета |");
     cout << endl;
@@ -236,48 +230,75 @@ void displayFlightsTable()
 
 void searchFlights(std::string choice)
 {
-    std::string flight_name;
-    std::string departure_time;
-    double ticket_price;
+    std::string flightName;
+    std::string departureTime;
+    double ticketPrice;
 
     std::cout << "Введите номер рейса (или введите 'any' для отображения всех): ";
-    std::cin >> flight_name;
+    std::cin >> flightName;
     std::cout << "Введите время вылета (или введите 'any' для отображения любого): ";
-    std::cin >> departure_time;
+    std::cin >> departureTime;
+
     std::cout << "Введите стоимость билета (или введите '-1' для любой цены): ";
-    if (!(std::cin >> ticket_price)) {
+    if (!(std::cin >> ticketPrice)) {
         std::cerr << "Ошибка ввода." << std::endl;
-        std::string temp;
-        std::getline(std::cin >> std::ws, temp);
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
         return;
+        }
+    std::cout << std::endl << "Результат поиска: " << std::endl;
+
+    if (choice == "2") {
+        std::cout << "|" << string(111, '=') << "|" << std::endl;
+        std::cout << "|" << std::left << std::setw(2) << "id" << "|"
+                  << std::left << std::setw(19) << "Название" << "|"
+                  << std::left << std::setw(27) << "Наименование" << "|"
+                  << std::left << std::setw(20) << "Номер" << "|"
+                  << std::left << std::setw(20) << "Время" << "|"
+                  << std::left << std::setw(24) << "Количество" << "|"
+                  << std::left << std::setw(23) << "Дистанция" << " км" << "|"
+                  << std::left << std::setw(22) << "Стоимость" << " $" << "|"
+                  << std::endl;
+        std::cout << "|" << std::left << std::setw(2) << "  " << "|"
+                  << std::left << std::setw(20) << "аэропорта" << "|"
+                  << std::left << std::setw(20) << "рейса" << "|"
+                  << std::left << std::setw(20) << "рейса" << "|"
+                  << std::left << std::setw(21) << "вылета" << "|"
+                  << std::left << std::setw(20) << "кресел" << "|"
+                  << std::left << std::setw(20) << "полета" << " км" << "|"
+                  << std::left << std::setw(19) << "билета" << " $" << "|"
+                  << std::endl;
+        std::cout << "|" << string(111, '-') << "|" << std::endl;
     }
 
     for (int i = 0; i < flights.size(); i++) {
-        if (flight_name == "any" || departure_time == "Any" || departure_time == "ANY" ||
-            flights[i].getFlightName() == flight_name) {
-            if (departure_time == "any" || departure_time == "Any" || departure_time == "ANY" ||
-                flights[i].getDepartureTime() == departure_time) {
-                if (ticket_price == -1 || flights[i].getTicketPrice() == ticket_price) {
-                    std::cout << "  ";
-                    if (choice == "1") {flights[i].display();}
-                    else if (choice == "2") {flights[i].display(i);}
+        if (flightName == "any" || departureTime == "Any" || departureTime == "ANY" || flights[i].getFlightName() == flightName) {
+            if (departureTime == "any" || departureTime == "Any" || departureTime == "ANY" || flights[i].getDepartureTime() == departureTime) {
+                if (ticketPrice == -1 || flights[i].getTicketPrice() == ticketPrice) {
+
+                    if (choice == "1") {
+                        std::cout << i << ".";
+                        flights[i].display();}
+                    else if (choice == "2") {
+                        flights[i].display(i);
+                        std::cout << "|" << string(111, '-') << "|" << std::endl;
+                    }
 
                 }
             }
         }
     }
+
+    if (choice == "2") {
+        std::cout << "|" << string(111, '=') << "|" << std::endl;
+    }
 }
 
 
-// переписать для работы с векторами
-// Ввод данных для поиска и модификации производить с клавиатуры.
-// Выбор варианта модификации определяется из диалога.
-// upd: функция цундерит - меняет правильно, но говорит что неправильный номер
-// upd2: починил
+
 void editTimeFlight(std::string choice)
 {
-
-    setlocale(LC_ALL, "Russian");
     std::string number;
     bool flag = false;
 
@@ -287,53 +308,59 @@ void editTimeFlight(std::string choice)
     std::cout << "Введите номер рейса рейса чтобы изменить время вылета: ";
     std::cin >> number;
 
-    for (int i = 0; i < flights.size(); i++) {
-        if (number == flights[i].getFlightNumber()) {
+    for (auto & flight : flights) {
+        if (number == flight.getFlightNumber()) {
             std::string Time = "";
             std::cout << "Введите новое время вылета: ";
             std::cin >> Time;
-            flights[i].setDepartureTime(Time);
-            saveFlights();
-            saveFlightsTxt();
-            flag = true;
-            break;
+            std::regex time_regex("^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$");
+            if (std::regex_match(Time, time_regex)) {
+                flight.setDepartureTime(Time);
+                saveFlights();
+                saveFlightsTxt();
+                flag = true;
+                return;
+            } else {
+                Time = "";
+                std::cerr << "Ошибка в формате времени!\n";
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                return;
+            }
         }
     }
-    if (flag != true) {
-        std::cerr<< "Неверный номер рейса." << std::endl;
-    }
+    std::cerr<< "Неверный номер рейса." << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
 }
 
 // переписать для работы с векторами
 void editPriceFlight(std::string choice)
 {
     std::string name;
-    bool flag = false;
     if (choice == "1") {displayFlights();}
     else if (choice == "2") {
-
+        std::cout << std::endl;
         displayFlightsTable();
     }
 
-    std::cout << "Введите наименование рейса чтобы изменить его стоимость: ";
+    std::cout << std::endl << "Введите наименование рейса чтобы изменить его стоимость: ";
     std::cin >> name;
 
 
-    for (int i = 0; i < flights.size(); i++)
+    for (auto &flight: flights)
     {
-        if (name == flights[i].getFlightName())
+        if (name == flight.getFlightName())
         {
             double price;
             std::cout << "Введите новую стоимость билета: ";
             std::cin >> price;
-            flights[i].setTicketPrice(price);
+            flight.setTicketPrice(price);
             saveFlights();
             saveFlightsTxt();
+            return;
         }
     }
-    if (flag != true) {
-        std::cerr << "Неверный номер рейса." << std::endl;
-    }
+    std::cerr << "Неверное наименование рейса." << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
 }
 
 void modificationFlight(std::string choice)
@@ -355,7 +382,7 @@ void modificationFlight(std::string choice)
     }
 
     if (choice == "2" && fin.peek() != EOF) {
-        std::cout << "|" << string(111, '=') << "|" << std::endl;
+        std::cout << std::endl << "|" << string(111, '=') << "|" << std::endl;
         std::cout << "|" << std::left << std::setw(2) << "id" << "|"
                   << std::left << std::setw(19) << "Название" << "|"
                   << std::left << std::setw(27) << "Наименование" << "|"
@@ -421,13 +448,16 @@ void modificationFlight(std::string choice)
     saveFlightsTxt();
     saveFlights();
 
-    std::cout << "Модификация успешно завершена!\nИзменено " << counter << " рейсов" << std::endl;
+    std::cout << "Модификация успешно завершена!\nИзменено " << counter << std::endl;
 }
 
 void deleteFlight(std::string choice)
 {
-    std::cout << "  " << std::endl;
-    if (choice == "1") {displayFlights();}
+    std::cout << "  ";
+    if (choice == "1") {
+        std::cout << std::endl;
+        displayFlights();
+    }
     else if (choice == "2") {displayFlightsTable();}
     int index;
     std::cout << "Введите индекс рейса чтобы удалить его: ";
@@ -443,16 +473,18 @@ void deleteFlight(std::string choice)
     {
         std::cerr << "Неправильный индекс." << std::endl;
     }
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
 }
 
 // сделать разные варианты вывода через choice
-void findClosestAndFarthest()
+void findClosestAndFarthest(std::string choice)
 {
-    std::string airport_name;
+    std::string airportName;
     std::cout << "Введите название аэропорта (или введите 'all' чтобы показать все): ";
-    std::cin >> airport_name;
+    std::cin >> airportName;
 
-    if (airport_name == "all" || airport_name == "All" || airport_name == "ALL")
+    if (airportName == "all" || airportName == "All" || airportName == "ALL")
     {
         double min_distance = 1e9, max_distance = -1e9;
         int min_index = -1, max_index = -1;
@@ -472,12 +504,65 @@ void findClosestAndFarthest()
             }
         }
 
-        std::cout << "Самый короткий перелет: " << std::endl;
-        std::cout << "  ";
-        flights[min_index].display(min_index);
+        std::cout << std::endl << "Самый короткий перелет: " << std::endl;
+        if (choice == "1") {
+            std::cout << "  ";
+            flights[min_index].display();
+        }
+        else if (choice == "2") {
+            std::cout << "|" << string ( 111, '=') << "|" <<  std::endl;
+            std::cout << "|" << std::left << std::setw(2) << "id" << "|"
+                      << std::left << std::setw(19) << "Название" << "|"
+                      << std::left << std::setw(27) << "Наименование" << "|"
+                      << std::left << std::setw(20) << "Номер" << "|"
+                      << std::left << std::setw(20) << "Время" << "|"
+                      << std::left << std::setw(24) << "Количество" << "|"
+                      << std::left << std::setw(23) << "Дистанция" << " км" << "|"
+                      << std::left << std::setw(22) << "Стоимость" << " $" << "|"
+                      << std::endl;
+            std::cout << "|" << std::left << std::setw(2) << "  " << "|"
+                      << std::left << std::setw(20) << "аэропорта" << "|"
+                      << std::left << std::setw(20) << "рейса" << "|"
+                      << std::left << std::setw(20) << "рейса" << "|"
+                      << std::left << std::setw(21) << "вылета" << "|"
+                      << std::left << std::setw(20) << "кресел" << "|"
+                      << std::left << std::setw(20) << "полета" << " км" << "|"
+                      << std::left << std::setw(19) << "билета" << " $" << "|"
+                      << std::endl;
+            std::cout << "|" << string ( 111, '-') << "|" << std::endl;
+            flights[min_index].display(min_index);
+            std::cout << "|" << string ( 111, '=') << "|" << std::endl;
+        }
         std::cout << "Самый длинный перелет: " << std::endl;
-        std::cout << "  ";
-        flights[max_index].display(max_index);
+
+        if (choice == "1") {
+            std::cout << "  ";
+            flights[max_index].display();
+        }
+        else if (choice == "2") {
+            std::cout << "|" << string ( 111, '=') << "|" <<  std::endl;
+            std::cout << "|" << std::left << std::setw(2) << "id" << "|"
+                      << std::left << std::setw(19) << "Название" << "|"
+                      << std::left << std::setw(27) << "Наименование" << "|"
+                      << std::left << std::setw(20) << "Номер" << "|"
+                      << std::left << std::setw(20) << "Время" << "|"
+                      << std::left << std::setw(24) << "Количество" << "|"
+                      << std::left << std::setw(23) << "Дистанция" << " км" << "|"
+                      << std::left << std::setw(22) << "Стоимость" << " $" << "|"
+                      << std::endl;
+            std::cout << "|" << std::left << std::setw(2) << "  " << "|"
+                      << std::left << std::setw(20) << "аэропорта" << "|"
+                      << std::left << std::setw(20) << "рейса" << "|"
+                      << std::left << std::setw(20) << "рейса" << "|"
+                      << std::left << std::setw(21) << "вылета" << "|"
+                      << std::left << std::setw(20) << "кресел" << "|"
+                      << std::left << std::setw(20) << "полета" << " км" << "|"
+                      << std::left << std::setw(19) << "билета" << " $" << "|"
+                      << std::endl;
+            std::cout << "|" << string ( 111, '-') << "|" << std::endl;
+            flights[max_index].display(max_index);
+            std::cout << "|" << string ( 111, '=') << "|" << std::endl;
+        }
     }
     else
     {
@@ -486,7 +571,7 @@ void findClosestAndFarthest()
 
         for (int i = 0; i < flights.size(); i++)
         {
-            if (flights[i].getAirportName() == airport_name)
+            if (flights[i].getAirportName() == airportName)
             {
                 if (flights[i].getDistance() < min_distance)
                 {
@@ -503,22 +588,78 @@ void findClosestAndFarthest()
         }
 
         std::cout << "Самый короткий перелет: " << std::endl;
-        std::cout << "  ";
-        flights[min_index].display(min_index);
-        std::cout << "Самый длинный перелет: " << std::endl;
-        std::cout << "  ";
-        flights[max_index].display(max_index);
+
+        if (choice == "1") {
+            std::cout << "  ";
+            flights[min_index].display();
+        }
+        else if (choice == "2") {
+            std::cout << "|" << string ( 111, '=') << "|" <<  std::endl;
+            std::cout << "|" << std::left << std::setw(2) << "id" << "|"
+                      << std::left << std::setw(19) << "Название" << "|"
+                      << std::left << std::setw(27) << "Наименование" << "|"
+                      << std::left << std::setw(20) << "Номер" << "|"
+                      << std::left << std::setw(20) << "Время" << "|"
+                      << std::left << std::setw(24) << "Количество" << "|"
+                      << std::left << std::setw(23) << "Дистанция" << " км" << "|"
+                      << std::left << std::setw(22) << "Стоимость" << " $" << "|"
+                      << std::endl;
+            std::cout << "|" << std::left << std::setw(2) << "  " << "|"
+                      << std::left << std::setw(20) << "аэропорта" << "|"
+                      << std::left << std::setw(20) << "рейса" << "|"
+                      << std::left << std::setw(20) << "рейса" << "|"
+                      << std::left << std::setw(21) << "вылета" << "|"
+                      << std::left << std::setw(20) << "кресел" << "|"
+                      << std::left << std::setw(20) << "полета" << " км" << "|"
+                      << std::left << std::setw(19) << "билета" << " $" << "|"
+                      << std::endl;
+            std::cout << "|" << string ( 111, '-') << "|" << std::endl;
+            flights[min_index].display(min_index);
+            std::cout << "|" << string ( 111, '=') << "|" << std::endl;
+        }
+
+        std::cout  << "Самый длинный перелет: " << std::endl;
+
+        if (choice == "1") {
+            std::cout << "  ";
+            flights[max_index].display();
+        }
+        else if (choice == "2") {
+            std::cout << "|" << string ( 111, '=') << "|" <<  std::endl;
+            std::cout << "|" << std::left << std::setw(2) << "id" << "|"
+                      << std::left << std::setw(19) << "Название" << "|"
+                      << std::left << std::setw(27) << "Наименование" << "|"
+                      << std::left << std::setw(20) << "Номер" << "|"
+                      << std::left << std::setw(20) << "Время" << "|"
+                      << std::left << std::setw(24) << "Количество" << "|"
+                      << std::left << std::setw(23) << "Дистанция" << " км" << "|"
+                      << std::left << std::setw(22) << "Стоимость" << " $" << "|"
+                      << std::endl;
+            std::cout << "|" << std::left << std::setw(2) << "  " << "|"
+                      << std::left << std::setw(20) << "аэропорта" << "|"
+                      << std::left << std::setw(20) << "рейса" << "|"
+                      << std::left << std::setw(20) << "рейса" << "|"
+                      << std::left << std::setw(21) << "вылета" << "|"
+                      << std::left << std::setw(20) << "кресел" << "|"
+                      << std::left << std::setw(20) << "полета" << " км" << "|"
+                      << std::left << std::setw(19) << "билета" << " $" << "|"
+                      << std::endl;
+            std::cout << "|" << string ( 111, '-') << "|" << std::endl;
+            flights[max_index].display(max_index);
+            std::cout << "|" << string ( 111, '=') << "|" << std::endl;
+        }
+
     }
 }
 
 // сделать разные варианты вывода через choice
-void findCheapestAndMostExpensive()
+void findCheapestAndMostExpensive(std::string choice)
 {
-    std::string flight_name;
+    std::string flightName;
     std::cout << "Введите наименование рейса (или введите 'all' чтобы показать все): ";
-    std::cin >> flight_name;
+    std::cin >> flightName;
 
-    if (flight_name == "all" || flight_name == "All" || flight_name == "ALL")
+    if (flightName == "all" || flightName == "All" || flightName == "ALL")
     {
         double min_price = 1e9, max_price = -1e9;
         int min_index = -1, max_index = -1;
@@ -538,12 +679,65 @@ void findCheapestAndMostExpensive()
             }
         }
 
-        std::cout << "Самый дешевый авиабилет: " << std::endl;
-        std::cout << "  ";
-        flights[min_index].display(min_index);
+        std::cout << std::endl << "Самый дешевый авиабилет: " << std::endl;
+        if (choice == "1") {
+            std::cout << "  ";
+            flights[min_index].display();
+        }
+        else if (choice == "2") {
+            std::cout << "|" << string ( 111, '=') << "|" <<  std::endl;
+            std::cout << "|" << std::left << std::setw(2) << "id" << "|"
+                      << std::left << std::setw(19) << "Название" << "|"
+                      << std::left << std::setw(27) << "Наименование" << "|"
+                      << std::left << std::setw(20) << "Номер" << "|"
+                      << std::left << std::setw(20) << "Время" << "|"
+                      << std::left << std::setw(24) << "Количество" << "|"
+                      << std::left << std::setw(23) << "Дистанция" << " км" << "|"
+                      << std::left << std::setw(22) << "Стоимость" << " $" << "|"
+                      << std::endl;
+            std::cout << "|" << std::left << std::setw(2) << "  " << "|"
+                      << std::left << std::setw(20) << "аэропорта" << "|"
+                      << std::left << std::setw(20) << "рейса" << "|"
+                      << std::left << std::setw(20) << "рейса" << "|"
+                      << std::left << std::setw(21) << "вылета" << "|"
+                      << std::left << std::setw(20) << "кресел" << "|"
+                      << std::left << std::setw(20) << "полета" << " км" << "|"
+                      << std::left << std::setw(19) << "билета" << " $" << "|"
+                      << std::endl;
+            std::cout << "|" << string ( 111, '-') << "|" << std::endl;
+            flights[min_index].display(min_index);
+            std::cout << "|" << string ( 111, '=') << "|" << std::endl;
+        }
+
         std::cout << "Самый дорогой авиабилет: " << std::endl;
-        std::cout << "  ";
-        flights[max_index].display(max_index);
+        if (choice == "1") {
+            std::cout << "  ";
+            flights[max_index].display();
+        }
+        else if (choice == "2") {
+            std::cout << "|" << string ( 111, '=') << "|" <<  std::endl;
+            std::cout << "|" << std::left << std::setw(2) << "id" << "|"
+                      << std::left << std::setw(19) << "Название" << "|"
+                      << std::left << std::setw(27) << "Наименование" << "|"
+                      << std::left << std::setw(20) << "Номер" << "|"
+                      << std::left << std::setw(20) << "Время" << "|"
+                      << std::left << std::setw(24) << "Количество" << "|"
+                      << std::left << std::setw(23) << "Дистанция" << " км" << "|"
+                      << std::left << std::setw(22) << "Стоимость" << " $" << "|"
+                      << std::endl;
+            std::cout << "|" << std::left << std::setw(2) << "  " << "|"
+                      << std::left << std::setw(20) << "аэропорта" << "|"
+                      << std::left << std::setw(20) << "рейса" << "|"
+                      << std::left << std::setw(20) << "рейса" << "|"
+                      << std::left << std::setw(21) << "вылета" << "|"
+                      << std::left << std::setw(20) << "кресел" << "|"
+                      << std::left << std::setw(20) << "полета" << " км" << "|"
+                      << std::left << std::setw(19) << "билета" << " $" << "|"
+                      << std::endl;
+            std::cout << "|" << string ( 111, '-') << "|" << std::endl;
+            flights[max_index].display(max_index);
+            std::cout << "|" << string ( 111, '=') << "|" << std::endl;
+        }
     }
     else
     {
@@ -552,7 +746,7 @@ void findCheapestAndMostExpensive()
 
         for (int i = 0; i < flights.size(); i++)
         {
-            if (flights[i].getFlightName() == flight_name)
+            if (flights[i].getFlightName() == flightName)
             {
                 if (flights[i].getTicketPrice() < min_price)
                 {
@@ -570,6 +764,7 @@ void findCheapestAndMostExpensive()
 
         std::cout << "Самый дешевый авиабилет: ";
         std::cout << "  ";
+
         flights[min_index].display(min_index);
         std::cout << "Самый дорогой авиабилет: ";
         std::cout << "  ";

@@ -47,7 +47,7 @@ int main()
         std::cout << "6. Найти самые короткий и длинный рейсы" << std::endl;
         std::cout << "7. Найти самые дешевые и самые дорогие авиабилеты" << std::endl;
         std::cout << "8. Модификация данных из файла" << std::endl;
-        std::cout << "9. Изменение отображения данный о рейсах" << std::endl;
+        std::cout << "9. Изменение отображения данных о рейсах" << std::endl;
         std::cout << "10. Выход" << std::endl;
         std::cout << "Сделайте выбор: ";
 
@@ -82,8 +82,7 @@ int main()
             else if (tableChoice == "2") {displayFlightsTable();}
             break;
         case 3:
-            if (tableChoice == "1") {searchFlights("1");}
-            else if (tableChoice == "2") {searchFlights("2");}
+            searchFlights(tableChoice);
             break;
         case 4:
             while (true)
@@ -95,13 +94,11 @@ int main()
                 std::cin >> editChoice;
                 if (editChoice == "1")
                 {
-                    if (tableChoice == "1") {editTimeFlight("1");}
-                    else if (tableChoice == "2") {editTimeFlight("2");}
+                    editTimeFlight(tableChoice);
                     break;
                 }
                 else if (editChoice == "2") {
-                    if (tableChoice == "1") {editPriceFlight("1");}
-                    else if (tableChoice == "2") {editPriceFlight("2");}
+                    editPriceFlight(tableChoice);
                     break;
                 }
                 else if (editChoice == "3") {
@@ -121,8 +118,7 @@ int main()
                 std::cout << "Сделайте выбор: ";
                 std::cin >> modChoice;
                 if (modChoice == "1") {
-                    if (tableChoice == "1") {deleteFlight("1");}
-                    else if (tableChoice == "2") {deleteFlight("2");}
+                    deleteFlight(tableChoice);
                     break;
                 }
                 else if (modChoice == "2")
@@ -134,10 +130,10 @@ int main()
             break;
 
         case 6:
-            findClosestAndFarthest();
+            findClosestAndFarthest(tableChoice);
             break;
         case 7:
-            findCheapestAndMostExpensive();
+            findCheapestAndMostExpensive(tableChoice);
             break;
         case 8:
             while (true) {
@@ -157,6 +153,7 @@ int main()
                     break;
                 }
                 else { std::cerr << "Ошибка ввода" << std::endl; }
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
             break;
         case 9:
@@ -181,6 +178,7 @@ int main()
                     break;
                 }
                 else { std::cerr << "Ошибка ввода" << std::endl; }
+
             }
             break;
         case 10:
@@ -188,7 +186,8 @@ int main()
                 saveFlightsTxt();
                 exit(0);
         default:
-            std::cerr << "Ошибка ввода" << std::endl;
+            std::cerr << "Ошибка ввода";
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
             break;
         }
 

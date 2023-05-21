@@ -117,32 +117,51 @@ public:
 
     void read()
     {
-        std::string input;
-        std::regex time_regex("^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$");
+        std::string inputTime;
+        std::string inputAirport;
+        std::regex timeRegex("^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$");
+        std::regex airportRegex("^[A-Z]{3}$");
 
-        std::cout << "Введите название аэропорта: ";
-        std::cin >> airport_name;
+        while (true) {
+            std::cout << "Введите название аэропорта: ";
+            std::cin >> inputAirport;
+
+            // проверка на правильный ввод названия аэропорта в формате IATA
+            if (std::regex_match(inputAirport, airportRegex)) {
+                airport_name = inputAirport;
+                break;
+            } else {
+                airport_name = "";
+                std::cout << "\nОшибка в формате IATA!\n";
+            }
+
+        }
+
         std::cout << "Введите наименование рейса: ";
         std::cin >> flight_name;
         std::cout << "Введите номер рейса: ";
         std::cin >> flight_number;
+
         // проверка на правильный ввод времени
         while (true) {
             std::cout << "Введите время вылета: ";
-            std::cin >> input;
-            if (std::regex_match(input, time_regex)) {
-                departure_time = input;
+            std::cin >> inputTime;
+
+            if (std::regex_match(inputTime, timeRegex)) {
+                departure_time = inputTime;
                 break;
             } else {
-                std::cout << "Ошибка формата времени!\nПожалуйста повторите ввод" << std::endl;
+                std::cout << "Ошибка формата времени!\nПожалуйста повторите ввод\n" << std::endl;
             }
         }
+
         // Проверка на правильный ввод chairs_amount
         while (true) {
             std::cout << "Введите количество кресел: ";
             if (std::cin >> chairs_amount) {
                 break;
             }
+
             std::cout << "Некорректный ввод, повторите попытку.\n";
             std::string temp;
             std::getline(std::cin >> std::ws, temp);
@@ -154,10 +173,10 @@ public:
             if (std::cin >> distance) {
                 break;
             }
+
             std::cout << "Некорректный ввод, повторите попытку.\n";
             std::string temp;
             std::getline(std::cin >> std::ws, temp);
-
         }
 
         // Проверка на правильный ввод ticket_price
@@ -166,6 +185,7 @@ public:
             if (std::cin >> ticket_price) {
                 break;
             }
+
             std::cout << "Некорректный ввод, повторите попытку.\n";
             std::string temp;
             std::getline(std::cin >> std::ws, temp);
@@ -205,7 +225,10 @@ public:
         fin.read((char*)&len, sizeof(int));
         value = new char[len + 1];
         fin.read(value, len);
-        airport_name = value;
+        std::regex airportRegex("^[A-Z]{3}$");
+        if (std::regex_match(value, airportRegex)) {
+            airport_name = value;
+        }
         delete[] value;
         if (airport_name == "") {return;}
 
@@ -226,8 +249,8 @@ public:
         fin.read(value, len);
 
         // проверка на правильный ввод времени
-        std::regex time_regex("^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$");
-        if (std::regex_match(value, time_regex)) {
+        std::regex timeRegex("^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$");
+        if (std::regex_match(value, timeRegex)) {
             departure_time = value;
         } else {
             departure_time = "";
@@ -254,9 +277,17 @@ public:
     }
 
     void read_text(std::ifstream& fin) {
-        std::getline(fin, airport_name);
-        if (airport_name.empty()) {
+        std::regex airportRegex("^^[A-Z]{3,3}$");
+        std::string inputAirport;
+        std::getline(fin, inputAirport);
+        if (inputAirport.empty()) {
             return;
+        }
+        if (std::regex_match(inputAirport, airportRegex)) {
+            airport_name = inputAirport;
+        } else {
+            airport_name = "";
+            std::cerr << "\nОшибка в формате IATA!\nПроверьте и измените введеные данные через консоль!\n";
         }
         std::getline(fin, flight_name);
         std::getline(fin, flight_number);
@@ -264,32 +295,33 @@ public:
 
         // проверка на правильный ввод времени
         std::string tmp;
-        std::regex time_regex("^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$");
-        if (!std::regex_match(departure_time, time_regex)) {
-            std::cerr << "\nОшибка в формате времени!\nПроверьте и измените введеные данные через консоль!" << std::endl;
+        std::regex timeRegex("^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$");
+        if (!std::regex_match(departure_time, timeRegex)) {
+            std::cerr << "\nОшибка в формате времени!\nПроверьте и измените введеные данные через консоль!\n" << std::endl;
             std::cerr << "Аэропорт " << airport_name <<std::endl;
             std::cerr << "Рейс №" << flight_number;
             departure_time = "";
         }
 
         if (!(fin >> chairs_amount)) {
-            std::cerr << "\nЧасть введенных данных некорректна, проверьте данные в файле\nЛибо измените введеные данные через консоль";
+            std::cerr << "\nЧасть введенных данных некорректна, проверьте данные в файле\nЛибо измените введеные данные через консоль\n";
 
         }
         fin.ignore(); // пропустить символ новой строки
 
         if (!(fin >> distance)) {
-            std::cerr << "\nЧасть введенных данных некорректна, проверьте данные в файле\nЛибо измените введеные данные через консоль";
+            std::cerr << "\nЧасть введенных данных некорректна, проверьте данные в файле\nЛибо измените введеные данные через консоль\n";
         }
         fin.ignore(); // пропустить символ новой строки
 
         if (!(fin >> ticket_price)) {
-            std::cerr << "\nЧасть введенных данных некорректна, проверьте данные в файле\nЛибо измените введеные данные через консоль";
+            std::cerr << "\nЧасть введенных данных некорректна, проверьте данные в файле\nЛибо измените введеные данные через консоль\n";
 
         }
         fin.ignore(); // игнор ньюлайнов
     }
 
+    // Функция лаконичного вывода
     void display()
     {
         std::cout << "Название Аэропорта: " << airport_name << std::endl;
@@ -302,18 +334,9 @@ public:
         std::cout << std::endl;
     }
 
+    // Функция табличного вывода
     void display(int i)
     {
-        /*
-        std::cout << "Название Аэропорта: " << airport_name << std::endl;
-        std::cout << "  Наименование рейса: " << flight_name << std::endl;
-        std::cout << "  Номер рейса: " << flight_number << std::endl;
-        std::cout << "  Время вылета: " << departure_time << std::endl;
-        std::cout << "  Количество кресел: " << chairs_amount << std::endl;
-        std::cout << "  Расстояние: " << distance << " км" << std::endl;
-        std::cout << "  Цена билета: " << ticket_price << " $" << std::endl;
-        std::cout << std::endl;
-        */
         std::cout << "|" << " " << i ;
         std::cout << "|"  << std::left << std::setw(11) << airport_name << "|"
                   << std::left << std::setw(15) << flight_name << "|"
@@ -323,14 +346,5 @@ public:
                   << std::left << std::setw(17) << distance << "|"
                   << std::left << std::setw(15) << std::put_money(ticket_price, true) << "|"
                   << std::endl;
-
-        /*
-         std::cout << airport_name << "\t" << flight_name << "\t"
-         << flight_number << "\t"
-         << departure_time << "\t"<< chairs_amount << "\t"
-         << distance << " км" << "\t"
-         << ticket_price << " $" << std::endl;
-         std::cout << std::endl;
-         */
     }
 };

@@ -264,7 +264,6 @@ public:
         fin.read((char*)&ticket_price, sizeof(double));
     }
 
-
     //функции для записи и чтения в обычном формате
     void write_text(std::ofstream& fout) {
         fout << airport_name << std::endl;
@@ -287,7 +286,7 @@ public:
             airport_name = inputAirport;
         } else {
             airport_name = "";
-            std::cerr << "\nОшибка в формате IATA!\nПроверьте и измените введеные данные через консоль!\n";
+            std::cerr << "\nОшибка в формате IATA!\nДанные несоответсвенного формата были удалены\n";
         }
         std::getline(fin, flight_name);
         std::getline(fin, flight_number);

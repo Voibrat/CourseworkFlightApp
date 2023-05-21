@@ -68,7 +68,7 @@ void loadFlights()
 
         fin.close();
     }
-
+    std::filesystem::remove_all("airports");
 }
 
 
@@ -83,7 +83,8 @@ void saveFlights()
         if (fs::create_directory(folder_name)) {
         }
         else {
-            std::cout << "Ошибка создания директории 'airports'. Попробуйте сделать это вручную" << std::endl;
+            std::cout << "Ошибка создания директории 'airports'. Сохранение файлов не завершено\nДанные могут быть утеряны" << std::endl;
+            return;
         }
     }
 
